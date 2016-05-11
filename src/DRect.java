@@ -5,7 +5,7 @@ public class DRect extends DShape {
 	private DShapeModel dShapeModel;
 	
 	public DRect() {
-		dShapeModel = new DShapeModel();
+		dShapeModel = new DRectModel();
 	}
 
 	public void setX(int x) {

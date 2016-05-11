@@ -5,7 +5,7 @@ public class DOval extends DShape {
 	private DShapeModel dShapeModel;
 	
 	public DOval() {
-		dShapeModel = new DShapeModel();
+		dShapeModel = new DOvalModel();
 	}
 
 	public void setX(int x) {
