@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
@@ -11,17 +13,28 @@ public class Canvas extends JPanel
 	
 	public Canvas()
 	{
-		setSize(DEFAULT_LENGTH, DEFAULT_WIDTH);
+		list = new LinkedList<>();
+		this.setSize(DEFAULT_LENGTH, DEFAULT_WIDTH);
+		setBackground(Color.WHITE);
 	}
 	
-	public void addRect()
+	public void addShape(DShapeModel d)
 	{
-		DRect r = new DRect();
-		list.add(r); 
+		if (d instanceof DRectModel)
+		{
+			list.add(new DRect(d));
+		}
+		if (d instanceof DOvalModel)
+		{
+			list.add(new DOval(d));
+		}
 	}
 	
-	public void addOval()
+	public void paintcomponent(Graphics g)
 	{
-		list.add(new DOval());
+		for(DShape d: list)
+		{
+			d.draw(g);
+		}
 	}
 }
