@@ -1,57 +1,28 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 public class DShapeModel {
-	private int x,y, width, height;
+	private Rectangle shapeBound;
 	private Color color;
 	
 	public DShapeModel() {
-		this.x = 0;
-		this.y = 0;
-		this.width = 0;
-		this.height = 0;
-		this.color = Color.GRAY;
+		shapeBound = new Rectangle(0, 0, 0, 0);
+		this.color = Color.gray;
+	}
+	
+	public DShapeModel(int x, int y, int width, int height, Color color) {
+		this.shapeBound = new Rectangle(x, y, width, height);
+		this.color = color;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setBounds(int x, int y, int width, int height) {
+		this.shapeBound = new Rectangle(x, y, width, height);
 	}
 
-	public void setY(int y) {
-		this.y = y;	
+	public Rectangle getBounds() {
+		return shapeBound;
 	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	public int getX() {
-		return this.x;
-	}
-
-	public int getY() {
-		return this.y;
-	}
-
-	public int getWidth() {
-		return this.width;
-	}
-
-	public int getHeight() {
-		return this.height;
-	}
-
-	public void setParams(int x, int y, int width, int height) {
-		this.x = x;
-		this. y = y;
-		this.width = width;
-		this.height = height;
-	}
-
 	public void setColor(Color color) {
 		this.color = color;
 	}
@@ -59,9 +30,4 @@ public class DShapeModel {
 	public Color getColor() {
 		return this.color;
 	}
-
-	public void draw(Graphics g) {
-		// called by subclass
-	}	
-
 }

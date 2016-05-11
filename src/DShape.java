@@ -1,49 +1,16 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
-public class DShape {
-	private DShapeModel dShapeModel;
+public abstract class DShape {
+	protected DShapeModel dShapeModel;
+	protected Canvas canvas;
 	
-	public DShape() {
-		dShapeModel = new DShapeModel();
+	public DShape(DShapeModel dShapeModel, Canvas Canvas) {
+		this.dShapeModel = dShapeModel;
+		this.canvas = canvas;
+		
 	}
-
-	public void setX(int x) {
-		dShapeModel.setX(x);
-	}
-
-	public void setY(int y) {
-		dShapeModel.setY(y);
-	}
-
-	public void setWidth(int width) {
-		dShapeModel.setWidth(width);
-	}
-
-	public void setHeight(int height) {
-		dShapeModel.setHeight(height);
-	}
-
-	public int getX() {
-		return dShapeModel.getX();
-	}
-
-	public int getY() {
-		return dShapeModel.getY();
-	}
-
-	public int getWidth() {
-		return dShapeModel.getWidth();
-	}
-
-	public int getHeight() {
-		return dShapeModel.getHeight();
-	}
-
-	public void setParams(int x, int y, int width, int height) {
-		dShapeModel.setParams(x, y, width, height);
-	}
-
 	public void setColor(Color color) {
 		dShapeModel.setColor(color);
 	}
@@ -51,8 +18,11 @@ public class DShape {
 	public Color getColor() {
 		return dShapeModel.getColor();
 	}
+	
+	public Rectangle getBounds() {
+		return dShapeModel.getBounds();
+	}
 
-	public void draw(Graphics g) {
-		dShapeModel.draw(g);
-	}	
+	abstract public void draw(Graphics g);
+		
 }
