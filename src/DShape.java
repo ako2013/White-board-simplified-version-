@@ -6,9 +6,10 @@ public abstract class DShape {
 	protected DShapeModel dShapeModel;
 	protected Canvas canvas;
 	
-	public DShape(DShapeModel dShapeModel, Canvas canvas) {
+	public DShape(DShapeModel dShapeModel, Canvas Canvas) {
 		this.dShapeModel = dShapeModel;
 		this.canvas = canvas;
+		
 	}
 	public void setColor(Color color) {
 		dShapeModel.setColor(color);
