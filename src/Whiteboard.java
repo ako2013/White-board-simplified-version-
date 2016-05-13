@@ -1,12 +1,16 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+
 
 public class Whiteboard extends JFrame
 {
@@ -25,35 +29,98 @@ public class Whiteboard extends JFrame
 		
 		//Set the Canvas and panel
 		Canvas drawPane = new Canvas();
-		JPanel buttonPane = new JPanel(); 
+		JSplitPane  utilPane = new JSplitPane();
+		JPanel buttonPane = new JPanel();
+		JPanel infoPane = new JPanel();
+		
+		//Make boxes
+		Box vert = Box.createVerticalBox();
+		Box horz1 = Box.createHorizontalBox();
+		Box horz2 = Box.createHorizontalBox();
+		Box horz3 = Box.createHorizontalBox();		
+		Box horz4 = Box.createHorizontalBox();	
 		
 		//ButtonCode
-		JButton b1 = new JButton("Rect");
-		JButton b2 = new JButton("Oval");
-		JButton b3 = new JButton("Line");
-		JButton b4 = new JButton("Text");
+		JButton b1 = new JButton("Add Rect");
+		JButton b2 = new JButton("Add Oval");
+		JButton b3 = new JButton("Add Line");
+		JButton b4 = new JButton("Add Text");
+		JButton b5 = new JButton("Set Color");
+		JButton b6 = new JButton("Move to Front");
+		JButton b7 = new JButton("Move to Back");
+		JButton b8 = new JButton("Remove");
+		JTextField t1 = new JTextField();
+		
 		
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DRectModel d = new DRectModel(100, 100, 100, 100, Color.BLACK);
+				DRectModel d = new DRectModel(100, 100, 100, 100, Color.ORANGE);
 				DShape rect = new DRect(d);
 				drawPane.addRect(rect);
 				drawPane.repaint();
 			}
 		});
 		
-		//Add buttons to buttonPane
-		buttonPane.add(b1);
-		buttonPane.add(b2);
-		buttonPane.add(b3);
-		buttonPane.add(b4);
+		b2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DOvalModel d = new DOvalModel(300, 300, 100, 100, Color.ORANGE);
+				DShape oval = new DOval(d);
+				drawPane.addOval(oval);
+				drawPane.repaint();
+			}
+		});
+		
+		//Box Code and addition to buttonPane
+		vert.add(horz1);
+		vert.add(horz2);
+		vert.add(horz3);
+		vert.add(horz4);
+		horz1.add(b1);
+		horz1.add(b2);
+		horz1.add(b3);
+		horz1.add(b4);
+		horz2.add(b5);
+		horz3.add(t1);
+		horz4.add(b6);
+		horz4.add(b7);
+		horz4.add(b8);
+		
+		
+		
+		//utilPane Code
+		utilPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		utilPane.setDividerSize(5);
+		utilPane.setTopComponent(buttonPane);
+		utilPane.setBottomComponent(infoPane);
+		
+		//buttonPane Code
+		buttonPane.add(vert);
+		for (Component comp : horz1.getComponents()) 
+		{
+			JComponent c = (JComponent) comp;
+			c.setAlignmentX(Box.LEFT_ALIGNMENT);
+		}
+		for (Component comp : horz2.getComponents()) 
+		{
+			JComponent c = (JComponent) comp;
+			c.setAlignmentX(Box.LEFT_ALIGNMENT);
+		}
+		for (Component comp : horz3.getComponents()) 
+		{
+			JComponent c = (JComponent) comp;
+			c.setAlignmentX(Box.LEFT_ALIGNMENT);
+		}
+		for (Component comp : horz4.getComponents()) 
+		{
+			JComponent c = (JComponent) comp;
+			c.setAlignmentX(Box.LEFT_ALIGNMENT);
+		}
+		
 		
 		
 		//Add canvas and buttonPane to the frame
-		buttonPane.setPreferredSize(new Dimension(500, 500));
-		drawPane.setPreferredSize(new Dimension(500, 500)); 
-		board.add(buttonPane, BorderLayout.WEST);
-		board.add(drawPane, BorderLayout.EAST);
+		board.add(utilPane, BorderLayout.LINE_START);
+		board.add(drawPane, BorderLayout.CENTER);
 		
 		//Generic Swing things
 		board.setSize(FRAME_WIDTH, FRAME_HEIGHT);

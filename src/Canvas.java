@@ -20,14 +20,12 @@ public class Canvas extends JPanel
 	
 	public void addRect(DShape d)
 	{
-		//DRect r = new DRect(d);
 		list.add(d); 
-		System.out.println("Ya Da");
 	}
 	
-	public void addOval()
+	public void addOval(DShape d)
 	{
-		//list.add(new DOval());
+		list.add(d);
 	}
 	
 	 @Override
@@ -35,7 +33,6 @@ public class Canvas extends JPanel
 	 {
 		// TODO Auto-generated method stub
 		super.paintComponent(g);
-		System.out.println("Na gawa");
 		for(DShape d: list)
 		{
 			d.draw(g);
