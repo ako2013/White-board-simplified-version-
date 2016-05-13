@@ -1,11 +1,10 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
 public class DRect extends DShape {
 	
-	public DRect(DShapeModel dShapeModel, Canvas canvas) {
-		super(dShapeModel, canvas);
+	public DRect(DShapeModel dShapeModel) {
+		super(dShapeModel);
 	}
 
 	public void draw(Graphics g) {
