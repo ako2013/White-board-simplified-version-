@@ -13,4 +13,9 @@ public class DRect extends DShape {
 		Rectangle shapeBounds = dShapeModel.getBounds();
 		g.fillRect(shapeBounds.x, shapeBounds.y, shapeBounds.width, shapeBounds.height);
 	}
+
+	@Override
+	public DShapeModel getModel() {
+		return dShapeModel;
+	}
 }

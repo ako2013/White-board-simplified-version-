@@ -8,12 +8,15 @@ public class DOval extends DShape {
 		super(dShapeModel);
 	}
 
-	
-	
 	public void draw(Graphics g) {
 		g.setColor(dShapeModel.getColor());
 		Rectangle shapeBounds = dShapeModel.getBounds();
 		g.fillOval(shapeBounds.x, shapeBounds.y, shapeBounds.width, shapeBounds.height);
+	}
+
+	@Override
+	public DShapeModel getModel() {
+		return dShapeModel;
 	}
 	
 	

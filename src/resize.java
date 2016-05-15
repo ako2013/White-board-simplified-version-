@@ -20,11 +20,11 @@ public class resize
       
    */
    public resize(DShape shape)
-   {
+   {/*
       this.P1 = shape.getX();
       this.P2 = shape.getY();
       this.P3 = shape.getWidth();
-      this.P4 = shape.getHeight();
+      this.P4 = shape.getHeight();*/
    } 
    
    public void createGrip()

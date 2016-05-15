@@ -1,10 +1,14 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,59 +20,57 @@ public class Whiteboard extends JFrame
 {
 	final int FRAME_WIDTH = 1000; 
 	final int FRAME_HEIGHT = 1000; 
+	private Canvas drawPane;
+	private Box vert, horz1, horz2, horz3, horz4;
+	private JButton b1, b2, b3, b4, b5, b6, b7, b8;
+	private JTextField t1;
+	private	JSplitPane utilPane;
+	private JPanel buttonPane,infoPane;
+	private JFrame board;
+
+	public Whiteboard() 
+	{
+		// Set up the Whiteboard with different components
+		setCanvasAndPanel();
+		setButtons();
+		createBoxes();
+		setUtilPanes();
+		fillCanvas();
+	}
 	
 	public static void main(String[] args)
+	{
+		// Create a white board
+        Whiteboard whiteboard = new Whiteboard(); 
+		
+	}
+	
+	private void setCanvasAndPanel()
 	{
 		//Size of Window
 		final int FRAME_WIDTH = 1000; 
 		final int FRAME_HEIGHT = 1000; 
-				
-		//New Whiteboard Frame
-		JFrame board = new JFrame("Whiteboard");
-		board.setLayout(new BorderLayout());
 		
 		//Set the Canvas and panel
-		Canvas drawPane = new Canvas();
+		drawPane = new Canvas(this);
+		//New Whiteboard Frame
+		board = new JFrame("Whiteboard");
+		board.setLayout(new BorderLayout());
+
+		//Set the Canvas and panel
 		JSplitPane  utilPane = new JSplitPane();
 		JPanel buttonPane = new JPanel();
 		JPanel infoPane = new JPanel();
-		
+	}
+	
+	private void createBoxes()
+	{
 		//Make boxes
-		Box vert = Box.createVerticalBox();
-		Box horz1 = Box.createHorizontalBox();
-		Box horz2 = Box.createHorizontalBox();
-		Box horz3 = Box.createHorizontalBox();		
-		Box horz4 = Box.createHorizontalBox();	
-		
-		//ButtonCode
-		JButton b1 = new JButton("Add Rect");
-		JButton b2 = new JButton("Add Oval");
-		JButton b3 = new JButton("Add Line");
-		JButton b4 = new JButton("Add Text");
-		JButton b5 = new JButton("Set Color");
-		JButton b6 = new JButton("Move to Front");
-		JButton b7 = new JButton("Move to Back");
-		JButton b8 = new JButton("Remove");
-		JTextField t1 = new JTextField();
-		
-		
-		b1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				DRectModel d = new DRectModel(100, 100, 100, 100, Color.ORANGE);
-				DShape rect = new DRect(d);
-				drawPane.addRect(rect);
-				drawPane.repaint();
-			}
-		});
-		
-		b2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				DOvalModel d = new DOvalModel(300, 300, 100, 100, Color.ORANGE);
-				DShape oval = new DOval(d);
-				drawPane.addOval(oval);
-				drawPane.repaint();
-			}
-		});
+		vert = Box.createVerticalBox();
+		horz1 = Box.createHorizontalBox();
+		horz2 = Box.createHorizontalBox();
+		horz3 = Box.createHorizontalBox();		
+		horz4 = Box.createHorizontalBox();	
 		
 		//Box Code and addition to buttonPane
 		vert.add(horz1);
@@ -84,9 +86,78 @@ public class Whiteboard extends JFrame
 		horz4.add(b6);
 		horz4.add(b7);
 		horz4.add(b8);
+	}
+	
+	private void setButtons() 
+	{
+		//ButtonCode
+		b1 = new JButton("Add Rect");
+		b2 = new JButton("Add Oval");
+		b3 = new JButton("Add Line");
+		b4 = new JButton("Add Text");
+		b5 = new JButton("Set Color");
+		b6 = new JButton("Move to Front");
+		b7 = new JButton("Move to Back");
+		b8 = new JButton("Remove");
+		t1 = new JTextField();
 		
+		// Add rectangle
+		b1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DRectModel d = new DRectModel(100, 100, 100, 100, Color.GRAY);
+				drawPane.addShape(d);
+				drawPane.repaint();
+			}
+		});
 		
+		// Add oval
+		b2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DOvalModel d = new DOvalModel(300, 300, 100, 100, Color.GRAY);
+				drawPane.addShape(d);
+				drawPane.repaint();
+			}
+		});
 		
+		// Add line
+		b3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Point p1 = new Point(100, 90);
+				Point p2 = new Point(50, 40);
+				DLineModel d = new DLineModel();
+				d.setPoints(p1, p2);
+				drawPane.addShape(d);
+				drawPane.repaint();
+			}
+		});
+		
+		// Add text
+		b4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DTextModel d = new DTextModel();
+				d.setBounds(0, 0, 50, 50
+						);
+				drawPane.addShape(d);
+				drawPane.repaint();
+			}
+		});
+		
+		//Set color
+		b5.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+			
+		});
+	}
+	
+	private void setUtilPanes() 
+	{
+		utilPane = new JSplitPane();
+		buttonPane = new JPanel();
+		infoPane = new JPanel();
 		//utilPane Code
 		utilPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		utilPane.setDividerSize(5);
@@ -116,8 +187,14 @@ public class Whiteboard extends JFrame
 			c.setAlignmentX(Box.LEFT_ALIGNMENT);
 		}
 		
-		
-		
+		//Add canvas and buttonPane to the frame
+		board.add(utilPane, BorderLayout.LINE_START);
+		board.add(drawPane, BorderLayout.CENTER);
+				
+	}
+	
+	private void fillCanvas() 
+	{
 		//Add canvas and buttonPane to the frame
 		board.add(utilPane, BorderLayout.LINE_START);
 		board.add(drawPane, BorderLayout.CENTER);
@@ -127,7 +204,5 @@ public class Whiteboard extends JFrame
 		board.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		board.setVisible(true);
 	}
-	
-	
 	
 }
