@@ -8,14 +8,16 @@ public class DText extends DShape {
     private Font computedFont; 
     private boolean computeAgain; 
     
-	public DText(DShapeModel dShapeModel) {
+	public DText(DShapeModel dShapeModel) 
+	{
 		super(dShapeModel);
         computedFont = null; 
         computeAgain = false;
 	}
 
 	@Override
-	public void draw(Graphics g) {
+	public void draw(Graphics g)
+	{
 		// Clip to set the font so it doesn't go out of bound
 		Shape clip = g.getClip(); 
         g.setClip(clip.getBounds().createIntersection(getBounds())); 
@@ -28,20 +30,24 @@ public class DText extends DShape {
 	}
 
 	@Override
-	public DShapeModel getModel() {
+	public DShapeModel getModel()
+	{
 		return dShapeModel;
 	}
 	
-	public String getText() {
+	public String getText()
+	{
         DTextModel model = (DTextModel) getModel();
 		return model.getText();
 	}
-	public String getFont() {
+	public String getFont() 
+	{
 		DTextModel model = (DTextModel) getModel();
 		return model.getFont();
 	}
 	
-	public Font computeFont(Graphics g) {
+	public Font computeFont(Graphics g)
+	{
 		// Computing the font and re-computing for resize later
 		if (computeAgain) {
 			double size = startingSize;

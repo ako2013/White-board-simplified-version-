@@ -8,26 +8,42 @@ public class DShapeModel {
 	protected Rectangle shapeBound;
 	private Color color;
     protected ArrayList<ModelListener> listeners; 
+    private int index;
     
-	public DShapeModel() {
+	public DShapeModel() 
+	{
 		shapeBound = new Rectangle(0, 0, 0, 0);
 		this.color = Color.gray;
 	}
 	
-	public DShapeModel(int x, int y, int width, int height, Color color) {
+	public DShapeModel(int x, int y, int width, int height, Color color) 
+	{
 		this.shapeBound = new Rectangle(x, y, width, height);
 		this.color = color;
 	}
+	
+	public void setIndex(int index)
+	{
+		this.index = index;
+	}
+	
+	public int getIndex()
+	{
+		return this.index;
+	}
 
-	public void setBounds(int x, int y, int width, int height) {
+	public void setBounds(int x, int y, int width, int height) 
+	{
 		this.shapeBound = new Rectangle(x, y, width, height);
 	}
 	
-	public void setBounds(Rectangle bounds) { 
+	public void setBounds(Rectangle bounds) 
+	{ 
 		this.shapeBound = new Rectangle(bounds);
 	} 
 	
-	public Rectangle getBounds() {
+	public Rectangle getBounds()
+	{
 		return shapeBound;
 	}
 	
@@ -55,30 +71,37 @@ public class DShapeModel {
 		setBounds(new Rectangle(x, y, width, height));
 	}
 	   
-	public void setColor(Color color) {
+	public void setColor(Color color) 
+	{
 		this.color = color;
 	}
 
-	public Color getColor() {
+	public Color getColor()
+	{
 		return this.color;
 	}
 	
-	 public void addListener(ModelListener listener) { 
+	 public void addListener(ModelListener listener) 
+	 { 
 		 listeners.add(listener); 
 	 }
 	 
-	 public boolean removeListener(ModelListener listener) { 
+	 public boolean removeListener(ModelListener listener)
+	 { 
 		 return listeners.remove(listener); 
 	 } 
 	 
-	 public void notifyListeners() { 
-		 for(ModelListener listener : listeners) {
+	 public void notifyListeners()
+	 { 
+		 for(ModelListener listener : listeners)
+		 {
 			 listener.modelChanged(this); 
 		 }
 	 } 
 	 
 	 // Change shape position based on moved position
-	 public void moveShape(int xDirection, int yDirection) {
+	 public void moveShape(int xDirection, int yDirection)
+	 {
 		 shapeBound.x += xDirection; 
 		 shapeBound.y += yDirection; 
 		 

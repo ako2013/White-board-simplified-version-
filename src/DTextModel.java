@@ -6,26 +6,28 @@ public class DTextModel extends DShapeModel {
     private String text; 
     private String font; 
      
-    public DTextModel() { 
+    public DTextModel()
+    { 
         super(); 
         text = default_text; 
         font = default_font; 
     } 
     
-    public String getText() { 
+    public String getText() 
+    { 
         return text; 
     } 
     
-    public String getFont() { 
+    public String getFont()
+    { 
         return font; 
     } 
-    public void setText(String text) { 
+    public void setText(String text) 
+    { 
         this.text = text;
     } 
-    public void setFont(String font) { 
+    public void setFont(String font) 
+    { 
         this.font = font; 
     } 
-    
-    
-
 }

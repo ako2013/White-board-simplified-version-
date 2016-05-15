@@ -135,8 +135,7 @@ public class Whiteboard extends JFrame
 		b4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DTextModel d = new DTextModel();
-				d.setBounds(0, 0, 50, 50
-						);
+				d.setBounds(0, 0, 50, 50);
 				drawPane.addShape(d);
 				drawPane.repaint();
 			}
@@ -144,12 +143,39 @@ public class Whiteboard extends JFrame
 		
 		//Set color
 		b5.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+                Color selectedColor = JColorChooser.showDialog(Whiteboard.this, "Select A Color", drawPane.getSelectedShape().getColor()); 
+				drawPane.recolorShape(selectedColor);	
 			}
-			
+		});
+		
+		// Add shape to front
+		b6.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                drawPane.moveSelectedShapeToFront();
+			}
+		});
+		
+		// Add shape to back
+		b7.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				drawPane.moveSelectedShapeToBack();
+			}
+		});
+				
+		
+		// Remove a shape
+		b8.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (drawPane.isAShapeSelected()) {
+					drawPane.removeShape();	
+					repaint();
+				}				
+			}
 		});
 	}
 	
