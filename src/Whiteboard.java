@@ -1,19 +1,27 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 
 public class Whiteboard extends JFrame
@@ -23,27 +31,29 @@ public class Whiteboard extends JFrame
 	private Canvas drawPane;
 	private Box vert, horz1, horz2, horz3, horz4;
 	private JButton b1, b2, b3, b4, b5, b6, b7, b8;
+	private JTable table;
 	private JTextField t1;
 	private	JSplitPane utilPane;
-	private JPanel buttonPane,infoPane;
+	private JPanel buttonPane, infoPane;
 	private JFrame board;
 
+	public static void main(String[] args)
+	{
+		// Create a white board
+        Whiteboard whiteboard = new Whiteboard(); 		
+	}
+	
+	
 	public Whiteboard() 
 	{
 		// Set up the Whiteboard with different components
 		setCanvasAndPanel();
 		setButtons();
-		createBoxes();
-		setUtilPanes();
+		createTable();
+		createBoxes();		
+		setUtilPane();
 		fillCanvas();
-	}
-	
-	public static void main(String[] args)
-	{
-		// Create a white board
-        Whiteboard whiteboard = new Whiteboard(); 
-		
-	}
+	}	
 	
 	private void setCanvasAndPanel()
 	{
@@ -85,7 +95,14 @@ public class Whiteboard extends JFrame
 		horz3.add(t1);
 		horz4.add(b6);
 		horz4.add(b7);
-		horz4.add(b8);
+		horz4.add(b8);		
+	}
+	
+	private void createTable()
+	{
+		String[] columnNames = {"X", "Y", "Width", "Height"};
+		Object[][] data = {{"","","",""}};
+		table = new JTable(data , columnNames);
 	}
 	
 	private void setButtons() 
@@ -179,16 +196,26 @@ public class Whiteboard extends JFrame
 		});
 	}
 	
-	private void setUtilPanes() 
+	private void setUtilPane() 
 	{
+		
 		utilPane = new JSplitPane();
 		buttonPane = new JPanel();
 		infoPane = new JPanel();
+		
+		//infoPane Code
+		infoPane.add(table);
+		infoPane.setLayout(new FlowLayout());
+		
+		
+		
 		//utilPane Code
 		utilPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		utilPane.setDividerSize(5);
 		utilPane.setTopComponent(buttonPane);
 		utilPane.setBottomComponent(infoPane);
+		
+		
 		
 		//buttonPane Code
 		buttonPane.add(vert);
