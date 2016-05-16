@@ -144,24 +144,25 @@ public class Canvas extends JPanel
 
       addMouseMotionListener(new MouseAdapter() 
 		{ 
-            
             @Override
             public void mouseDragged(MouseEvent e)
             {
+               try{
                Point p = e.getPoint();
-               //int dx = e.getX()-x;
-               //int dy = e.getY()-y;
                int dx = p.x-x;
                int dy = p.y-y;
-               System.out.println("Point move: "+p.x+","+p.y);
-               System.out.println("Moved: "+dx+","+dy);
+               //System.out.println("Point move: "+p.x+","+p.y);
+               //System.out.println("Moved: "+dx+","+dy);
                if(isAShapeSelected){
-                  System.out.println("DRAGGING");
+                  //System.out.println("DRAGGING");
                   selectedShape.moveShape(dx,dy);
                   repaint();
                }
                x += dx;
                y += dy;
+               }catch (Exception e2){
+                  System.out.println("");
+               }
             }
       });
    }

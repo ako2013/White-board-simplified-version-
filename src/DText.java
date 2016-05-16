@@ -25,7 +25,8 @@ public class DText extends DShape {
         DTextModel model = (DTextModel) getModel();
         g.setColor(getColor()); 
         g.setFont(font); 
-        g.drawString(model.getText(), getBounds().x, getBounds().height); 
+        g.drawString(model.getText(), getBounds().x, getBounds().y 
+        + getBounds().height); 
         g.setClip(clip); 
 	}
 
