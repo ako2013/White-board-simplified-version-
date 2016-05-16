@@ -5,6 +5,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.awt.event.MouseMotionListener;
+
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -28,6 +30,7 @@ public class Canvas extends JPanel
 		setSize(DEFAULT_LENGTH, DEFAULT_WIDTH);
 		this.setBackground(Color.WHITE);
 		setCanvasOnClickListener();
+      dragShape();
 	}
 	
 	// Add a new shape to the linked list
@@ -78,7 +81,7 @@ public class Canvas extends JPanel
 	}
 	
 	public void selectObjectForClick(Point clickedPoint) {
-		lastX = clickedPoint.x; 
+		 lastX = clickedPoint.x; 
 	    lastY = clickedPoint.y; 
 	    movingPoint = null; 
 	    
@@ -118,16 +121,50 @@ public class Canvas extends JPanel
     } 
 	
 	// Mouse listens for click on the canvas
+   
+   int x =0;
+   int y =0;
 	private void setCanvasOnClickListener()
 	{
 		addMouseListener(new MouseAdapter() 
 		{ 
             public void mousePressed(MouseEvent e) 
             {
-            	selectObjectForClick(e.getPoint()); 
-            } 
+            	selectObjectForClick(e.getPoint());
+               Point p = e.getPoint();
+               x = p.x;
+               y = p.y;
+               System.out.println("Point origin: "+x+","+y);
+            }
         });
 	}
+   // drag shape
+   public void dragShape()
+   {
+
+      addMouseMotionListener(new MouseAdapter() 
+		{ 
+            
+            @Override
+            public void mouseDragged(MouseEvent e)
+            {
+               Point p = e.getPoint();
+               //int dx = e.getX()-x;
+               //int dy = e.getY()-y;
+               int dx = p.x-x;
+               int dy = p.y-y;
+               System.out.println("Point move: "+p.x+","+p.y);
+               System.out.println("Moved: "+dx+","+dy);
+               if(isAShapeSelected){
+                  System.out.println("DRAGGING");
+                  selectedShape.moveShape(dx,dy);
+                  repaint();
+               }
+               x += dx;
+               y += dy;
+            }
+      });
+   }
 	
 	// Move selected shape to the front
 	public void moveSelectedShapeToFront() 

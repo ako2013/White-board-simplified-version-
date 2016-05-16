@@ -93,10 +93,14 @@ public class DShapeModel {
 	 
 	 public void notifyListeners()
 	 { 
+       try{
 		 for(ModelListener listener : listeners)
 		 {
 			 listener.modelChanged(this); 
 		 }
+       }catch(Exception e){
+         System.out.println("NULL");
+       }
 	 } 
 	 
 	 // Change shape position based on moved position
