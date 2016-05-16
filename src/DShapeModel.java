@@ -50,7 +50,7 @@ public class DShapeModel {
 	public void setPoints(Point p1, Point p2) { 
 		int x, y;
 		
-		// We set our starting rectangle shape to be the lower left point
+		// We set our starting rectangle shape to be the upper left point
 		if (p1.x < p2.x) {
 			x = p1.x;
 		} else {

@@ -163,7 +163,10 @@ public class Whiteboard extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e) {
                 Color selectedColor = JColorChooser.showDialog(Whiteboard.this, "Select A Color", drawPane.getSelectedShape().getColor()); 
-				drawPane.recolorShape(selectedColor);	
+                
+                if (selectedColor != null) {
+                	drawPane.recolorShape(selectedColor);	
+                }
 			}
 		});
 		
