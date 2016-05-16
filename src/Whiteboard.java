@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -18,8 +19,11 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.event.TableColumnModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -100,9 +104,16 @@ public class Whiteboard extends JFrame
 	
 	private void createTable()
 	{
-		String[] columnNames = {"X", "Y", "Width", "Height"};
+		
+		Object[] columnNames = {"X", "Y", "Width", "Height"};
 		Object[][] data = {{"","","",""}};
 		table = new JTable(data , columnNames);
+		
+		/**
+		StringTableModel imageTableModel = new StringTableModel();
+		table = new JTable(imageTableModel);
+		table.getColumnModel().getColumn(0).setCellRenderer(new VariableRowHeightRenderer());
+		**/
 	}
 	
 	private void setButtons() 
