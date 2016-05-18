@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.awt.event.MouseMotionListener;
 
-
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
@@ -16,13 +15,16 @@ public class Canvas extends JPanel
 	private final int DEFAULT_LENGTH = 400; 
 	private final int DEFAULT_WIDTH =	400;	
 	private LinkedList<DShape> shapeList;
-    private Whiteboard whiteboard; 
-    private DShape selectedShape; 
-    private int lastX, lastY; 
-    private Point movingPoint; 
-    private Point anchorPoint; 
-    private boolean isAShapeSelected;
-    
+   private Whiteboard whiteboard; 
+   private DShape selectedShape; 
+   private int lastX, lastY; 
+   private Point movingPoint; 
+   private Point anchorPoint; 
+   private boolean isAShapeSelected;
+   private boolean isAKnobSelected;
+   private LinkedList<DShape> pointList;
+   private DShape selectedKnob; 
+ 
 	public Canvas(Whiteboard whiteBoard)
 	{
 		this.whiteboard = whiteBoard;
@@ -55,7 +57,6 @@ public class Canvas extends JPanel
         { 
             shape = new DText(dShapeModel); 
         } 
-		
         shapeList.add(shape); 
 		
 	}
@@ -95,13 +96,11 @@ public class Canvas extends JPanel
 	    		{
 	    			isAShapeSelected = true;
 	    			selectedShape = shape;
-	    			System.out.println("CLICKING ON A SHAPE NOW");
 	    		}
 	    	}
 	    }
 	    repaint();
 	} 
-	
 	// Return true if a valid shade is selected, false otherwise
 	public boolean isAShapeSelected() 
 	{
@@ -118,12 +117,12 @@ public class Canvas extends JPanel
 	public DShape getSelectedShape() 
 	{ 
         return selectedShape; 
-    } 
+   } 
 	
 	// Mouse listens for click on the canvas
+   private int x =0;
+   private int y =0;
    
-   int x =0;
-   int y =0;
 	private void setCanvasOnClickListener()
 	{
 		addMouseListener(new MouseAdapter() 
@@ -134,7 +133,20 @@ public class Canvas extends JPanel
                Point p = e.getPoint();
                x = p.x;
                y = p.y;
-               System.out.println("Point origin: "+x+","+y);
+               
+               try{
+                     pointList = new LinkedList<>();
+                     ArrayList<Point> point = selectedShape.getKnob();               
+                     DRectModel d;
+                     for(int i = 0; i <= 3;i++)
+                     {
+                        Point p2 = point.get(i);
+                        d = new DRectModel(p2.x, p2.y, 9, 9, Color.BLACK);
+                        DShape shape = new DRect(d);
+                        pointList.add(shape);
+                     } 
+               }catch(Exception execp){
+               }       
             }
         });
 	}
@@ -148,20 +160,27 @@ public class Canvas extends JPanel
             public void mouseDragged(MouseEvent e)
             {
                try{
-               Point p = e.getPoint();
-               int dx = p.x-x;
-               int dy = p.y-y;
-               //System.out.println("Point move: "+p.x+","+p.y);
-               //System.out.println("Moved: "+dx+","+dy);
-               if(isAShapeSelected){
-                  //System.out.println("DRAGGING");
-                  selectedShape.moveShape(dx,dy);
-                  repaint();
-               }
-               x += dx;
-               y += dy;
+                  Point p = e.getPoint();
+                  int dx = p.x-x;
+                  int dy = p.y-y;
+                  //if a shape is clicked on
+                  //drag it
+                  if(isAShapeSelected){
+                     selectedShape.moveShape(dx,dy);
+                     for(int i = 0;i <4;i++)
+                     {
+                        DShape shape = pointList.get(i);
+                        shape.moveShape(dx,dy);
+                        pointList.set(i,shape);
+                     }
+                     repaint();
+                  }
+                  x += dx;
+                  y += dy;
+                  
+                  //if a knob is clicked on
+                  //move it
                }catch (Exception e2){
-                  System.out.println("");
                }
             }
       });
@@ -186,16 +205,24 @@ public class Canvas extends JPanel
 			shapeList.add(0, selectedShape);
 			repaint();
 		}
-	}
-	
-	
+	}	
 	@Override
 	protected void paintComponent(Graphics g) 
 	{
 		super.paintComponent(g);
+      
 		for(DShape d: shapeList)
 		{
 			d.draw(g);
-		}
+  		}
+      try
+         {
+            for(int i = 0; i < 4; i++){
+                DShape d2 = pointList.get(i);
+                d2.draw(g);
+            }
+         }catch(Exception e){
+         }
+
 	}
 }

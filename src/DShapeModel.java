@@ -99,7 +99,7 @@ public class DShapeModel {
 			 listener.modelChanged(this); 
 		 }
        }catch(Exception e){
-         System.out.println("");
+         //System.out.println("");
        }
 	 } 
 	 
@@ -122,7 +122,6 @@ public class DShapeModel {
 		 
 		 // Send notification to the shape that a model has changed
 	     notifyListeners(); 
-	 } 
-	     
+	 }   
 	 
 }
