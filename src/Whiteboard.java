@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -40,7 +42,9 @@ public class Whiteboard extends JFrame
 	private	JSplitPane utilPane;
 	private JPanel buttonPane, infoPane;
 	private JFrame board;
-
+	private JScrollPane scrollpane;
+	private StringTableModel tableModel;
+	
 	public static void main(String[] args)
 	{
 		// Create a white board
@@ -105,11 +109,15 @@ public class Whiteboard extends JFrame
 	private void createTable()
 	{
 		
-		Object[] columnNames = {"X", "Y", "Width", "Height"};
-		Object[][] data = {{"","","",""}};
-		table = new JTable(data , columnNames);
-		
-		/**
+		//Object[] columnNames = {"X", "Y", "Width", "Height"};
+		//Object[][] data = {{"","","",""}};
+		tableModel = new StringTableModel();
+		table = new JTable(tableModel);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS); 
+        scrollpane = new JScrollPane(table); 
+        scrollpane.setPreferredSize(new Dimension(380, 400)); 
+
+        /**
 		StringTableModel imageTableModel = new StringTableModel();
 		table = new JTable(imageTableModel);
 		table.getColumnModel().getColumn(0).setCellRenderer(new VariableRowHeightRenderer());
@@ -218,18 +226,14 @@ public class Whiteboard extends JFrame
 		infoPane = new JPanel();
 		
 		//infoPane Code
-		infoPane.add(table);
+		infoPane.add(scrollpane);
 		infoPane.setLayout(new FlowLayout());
-		
-		
 		
 		//utilPane Code
 		utilPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		utilPane.setDividerSize(5);
 		utilPane.setTopComponent(buttonPane);
 		utilPane.setBottomComponent(infoPane);
-		
-		
 		
 		//buttonPane Code
 		buttonPane.add(vert);
@@ -272,4 +276,38 @@ public class Whiteboard extends JFrame
 		board.setVisible(true);
 	}
 	
+	// Update the selected shape
+    public void updateTableSelect(DShape selectedShape) { 
+        table.clearSelection(); 
+        if(selectedShape != null) { 
+            int index = tableModel.getRowForSpecificModel(selectedShape
+            		.getModel()); 
+            table.setRowSelectionInterval(index, index); 
+        } 
+    } 
+    
+    // A new shape added. Invoke table model's method to add shape to its shape list
+	public void addShapeToTable(DShape shape) {
+		tableModel.addAShapeModel(shape.getModel());
+		updateTableSelect(shape); 
+	} 
+    
+    // Shape has moved to back. Invoke table model's method to re-order the shape list
+    public void shapeMovedBack(DShape shape) { 
+        tableModel.moveShapeToBack(shape.getModel()); 
+        updateTableSelect(shape); 
+    } 
+     
+    // Shape has moved to front. Invoke table model's method to re-order the shape list
+    public void shapeMovedFront(DShape shape) { 
+        tableModel.moveShapeToFront(shape.getModel()); 
+        updateTableSelect(shape); 
+    }
+    
+    // Shape has been removed. Invoke table model's method to remove from shape list
+    public void shapeRemoved(DShape shape) { 
+        tableModel.removeAShapeModel(shape.getModel()); 
+        updateTableSelect(null); 
+    } 
+     
 }

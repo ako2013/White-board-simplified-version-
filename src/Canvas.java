@@ -57,19 +57,12 @@ public class Canvas extends JPanel
         { 
             shape = new DText(dShapeModel); 
         } 
+        // Add to the table list
+        whiteboard.addShapeToTable(shape); 
+        // Add to shape list
         shapeList.add(shape); 
 		
 	}
-	
-	// Remove the currently selected shape
-	public void removeShape() 
-	{ 
-		if (isAShapeSelected) 
-		{
-			shapeList.remove(selectedShape); 
-			repaint();
-		}
-    } 
 	
 	// Re-color the currently selected shape
 	public void recolorShape(Color color) 
@@ -153,7 +146,6 @@ public class Canvas extends JPanel
    // drag shape
    public void dragShape()
    {
-
       addMouseMotionListener(new MouseAdapter() 
 		{ 
             @Override
@@ -173,6 +165,7 @@ public class Canvas extends JPanel
                         shape.moveShape(dx,dy);
                         pointList.set(i,shape);
                      }
+                     whiteboard.updateTableSelect(selectedShape);
                      repaint();
                   }
                   x += dx;
@@ -192,6 +185,7 @@ public class Canvas extends JPanel
 		if (isAShapeSelected) {
 			shapeList.remove(selectedShape);
 			shapeList.add(selectedShape);
+	        whiteboard.shapeMovedFront(selectedShape); 
 			repaint();
 		}
 	}
@@ -203,9 +197,22 @@ public class Canvas extends JPanel
 		{
 			shapeList.remove(selectedShape);
 			shapeList.add(0, selectedShape);
+	        whiteboard.shapeMovedBack(selectedShape); 
 			repaint();
 		}
 	}	
+	
+	// Remove the currently selected shape
+	public void removeShape() 
+	{ 
+		if (isAShapeSelected) 
+		{
+			shapeList.remove(selectedShape); 
+	        whiteboard.shapeRemoved(selectedShape); 
+			repaint();
+		}
+    } 
+	
 	@Override
 	protected void paintComponent(Graphics g) 
 	{

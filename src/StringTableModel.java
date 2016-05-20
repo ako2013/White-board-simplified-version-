@@ -1,37 +1,104 @@
+import java.awt.Rectangle;
+import java.util.ArrayList;
+
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 
-public class StringTableModel extends AbstractTableModel
+public class StringTableModel extends AbstractTableModel implements ModelListener
 {
-	public static final int IMG_COL = 0;
+    private String[] columnNames = {"X", "Y", "Width", "Height"}; 
+    private ArrayList<DShapeModel> shapeModels; 
 
-	  public String[] m_colNames = { "Variable Dimension" };
+    public StringTableModel() {
+    	super();
+        shapeModels = new ArrayList<DShapeModel>(); 
+    }
 
-	  public Class[] m_colTypes = { String.class };
-
-	  public StringTableModel() {
-	    super();
-
-	  }
-
-	  public int getColumnCount() {
-	    return m_colNames.length;
-	  }
-
-	  public int getRowCount() {
-	    return 1;
-	  }
-
-	  public String getColumnName(int col) {
-	    return "" + col;
-	  }
-
-	  public Object getValueAt(int row, int col) 
-	  {
-	    return "";
-	  }
+    public int getRowCount() {
+    	return shapeModels.size();
+    }
+    
+    public String[] getColumnNames() {
+		return columnNames;
 	}
+    
+    // Returns length of column array
+    @Override
+    public int getColumnCount() {
+    	return columnNames.length;
+    }
+    
+    // Set column names
+    @Override
+    public String getColumnName(int index) {
+        return columnNames[index];
+    }
+    
+    public int getRowForSpecificModel(DShapeModel model) { 
+        return shapeModels.indexOf(model); 
+    } 
+    
+    @Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		// cells cannot be edited
+		return false;
+	}
+    
+    // Add a shape model to the array list
+    public void addAShapeModel(DShapeModel shapeModel) { 
+        shapeModels.add(0, shapeModel); 
+        fireTableDataChanged(); 
+    }
+    
+    // Remove a shape model from the array list
+    public void removeAShapeModel(DShapeModel shapeModel) { 
+        shapeModels.remove(shapeModel); 
+        fireTableDataChanged(); 
+    } 
+    
+    // Move selected shape to the back
+    public void moveShapeToBack(DShapeModel shapeModel) { 
+        if(!shapeModels.isEmpty()) {
+        	shapeModels.remove(shapeModel);
+        	shapeModels.add(shapeModel); 
+        }
+        fireTableDataChanged(); 
+    } 
+    
+    // Move selected shape to the front
+    public void moveShapeToFront(DShapeModel shapeModel) { 
+        if(!shapeModels.isEmpty()) {
+        	shapeModels.remove(shapeModel);
+        	shapeModels.add(0, shapeModel); 
+        }
+        fireTableDataChanged(); 
+    } 
+    
+    // Return value of specific row and column of the table
+    public Object getValueAt(int row, int col) {
+        Rectangle shapeBounds = shapeModels.get(row).getBounds(); 
+        
+        switch (col) {
+        	case 0:
+        		return shapeBounds.x;
+        	case 1:
+        		return shapeBounds.y;
+        	case 2:
+        		return shapeBounds.width;
+        	case 3:
+        		return shapeBounds.height;
+        	default:
+        		return null;
+        }
+	}
+
+	@Override
+	public void modelChanged(DShapeModel shapeModel) {
+        int index = shapeModels.indexOf(shapeModel); 
+        fireTableRowsUpdated(index, index); 
+	}
+}
 	
 	
 	
