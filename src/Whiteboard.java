@@ -6,6 +6,10 @@ import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.XMLDecoder;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Enumeration;
 
 import javax.swing.BorderFactory;
@@ -15,6 +19,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -35,8 +40,8 @@ public class Whiteboard extends JFrame
 	final int FRAME_WIDTH = 1000; 
 	final int FRAME_HEIGHT = 1000; 
 	private Canvas drawPane;
-	private Box vert, horz1, horz2, horz3, horz4;
-	private JButton b1, b2, b3, b4, b5, b6, b7, b8;
+	private Box vert, horz1, horz2, horz3, horz4, horz5;
+	private JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10;
 	private JTable table;
 	private JTextField t1;
 	private	JSplitPane utilPane;
@@ -89,12 +94,14 @@ public class Whiteboard extends JFrame
 		horz2 = Box.createHorizontalBox();
 		horz3 = Box.createHorizontalBox();		
 		horz4 = Box.createHorizontalBox();	
+		horz5 = Box.createHorizontalBox();
 		
 		//Box Code and addition to buttonPane
 		vert.add(horz1);
 		vert.add(horz2);
 		vert.add(horz3);
 		vert.add(horz4);
+		vert.add(horz5);
 		horz1.add(b1);
 		horz1.add(b2);
 		horz1.add(b3);
@@ -103,25 +110,18 @@ public class Whiteboard extends JFrame
 		horz3.add(t1);
 		horz4.add(b6);
 		horz4.add(b7);
-		horz4.add(b8);		
+		horz4.add(b8);	
+		horz5.add(b9);
+		horz5.add(b10);
 	}
 	
 	private void createTable()
-	{
-		
-		//Object[] columnNames = {"X", "Y", "Width", "Height"};
-		//Object[][] data = {{"","","",""}};
+	{	
 		tableModel = new StringTableModel();
 		table = new JTable(tableModel);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS); 
         scrollpane = new JScrollPane(table); 
-        scrollpane.setPreferredSize(new Dimension(380, 400)); 
-
-        /**
-		StringTableModel imageTableModel = new StringTableModel();
-		table = new JTable(imageTableModel);
-		table.getColumnModel().getColumn(0).setCellRenderer(new VariableRowHeightRenderer());
-		**/
+        scrollpane.setPreferredSize(new Dimension(380, 400));
 	}
 	
 	private void setButtons() 
@@ -135,6 +135,8 @@ public class Whiteboard extends JFrame
 		b6 = new JButton("Move to Front");
 		b7 = new JButton("Move to Back");
 		b8 = new JButton("Remove");
+		b9 = new JButton("Save");
+		b10 = new JButton("Load");
 		t1 = new JTextField();
 		
 		// Add rectangle
@@ -216,6 +218,28 @@ public class Whiteboard extends JFrame
 				}				
 			}
 		});
+		
+		//Save a whiteBoard
+		b9.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String result = JOptionPane.showInputDialog("File Name", null);
+				if (result != null) {
+					File f = new File(result);
+					open(f);
+				}
+			}
+		});
+		
+		//Load a Whiteborad
+		b10.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	private void setUtilPane() 
@@ -227,7 +251,7 @@ public class Whiteboard extends JFrame
 		
 		//infoPane Code
 		infoPane.add(scrollpane);
-		infoPane.setLayout(new FlowLayout());
+		
 		
 		//utilPane Code
 		utilPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -309,5 +333,21 @@ public class Whiteboard extends JFrame
         tableModel.removeAShapeModel(shape.getModel()); 
         updateTableSelect(null); 
     } 
+    
+    //Opens a file by opening an array of things and then instantiating those
+    public void open(File file)
+    {
+    	DShapeModel[] list = null;
+    	try {
+    		XMLDecoder xmlIn = new XMLDecoder(new BufferedInputStream( new FileInputStream (file)));
+    	}
+    	catch (Exception ignored){}
+    }
+    
+    //Saves a file by turning things into an xml file
+    public void save()
+    {
+    	
+    }
      
 }
