@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JComponent;
@@ -239,5 +240,10 @@ public class Canvas extends JPanel
          }catch(Exception e){
          }
 
+	}
+	
+	public List<DShape> getShapes()
+	{
+		return shapeList;
 	}
 }
