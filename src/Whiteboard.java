@@ -195,13 +195,18 @@ public class Whiteboard extends JFrame
 		// Add text
 		b4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+            //get text from textfield
+            String s = t1.getText();
+            //dynamically resize rect to fit the length of the text
+            int len = s.length()*7+10;
 				DTextModel d = new DTextModel();
-				d.setBounds(0, 0, 50, 50);
+            d.setText(s);
+				d.setBounds(10, 10, len, 40);
 				drawPane.addShape(d);
 				drawPane.repaint();
 			}
 		});
-		
+      		
 		//Set color
 		b5.addActionListener(new ActionListener() {
 			@Override
