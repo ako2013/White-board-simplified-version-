@@ -15,15 +15,15 @@ public class Canvas extends JPanel
 	private final int DEFAULT_LENGTH = 400; 
 	private final int DEFAULT_WIDTH =	400;	
 	private LinkedList<DShape> shapeList;
-   private Whiteboard whiteboard; 
-   private DShape selectedShape; 
-   private int lastX, lastY; 
-   private Point movingPoint; 
-   private Point anchorPoint; 
-   private boolean isAShapeSelected;
-   private boolean isAKnobSelected;
-   private LinkedList<DShape> pointList;
-   private DShape selectedKnob; 
+	private Whiteboard whiteboard;
+	private DShape selectedShape; 
+	private int lastX, lastY; 
+	private Point movingPoint; 
+	private Point anchorPoint; 
+	private boolean isAShapeSelected;
+	private boolean isAKnobSelected;
+	private LinkedList<DShape> pointList;
+	private DShape selectedKnob; 
  
 	public Canvas(Whiteboard whiteBoard)
 	{
@@ -56,6 +56,8 @@ public class Canvas extends JPanel
         else if(dShapeModel instanceof DTextModel) 
         { 
             shape = new DText(dShapeModel); 
+            DText textShape = (DText) shape; 
+            whiteboard.updateFont(textShape.getText(), textShape.getFont()); 
         } 
         // Add to the table list
         whiteboard.addShapeToTable(shape); 
@@ -212,6 +214,12 @@ public class Canvas extends JPanel
 			repaint();
 		}
     } 
+	
+	// Change text of currently selected shape
+	public void setText(String text) {
+		((DText) selectedShape).setText(text);
+		repaint();
+	}
 	
 	@Override
 	protected void paintComponent(Graphics g) 

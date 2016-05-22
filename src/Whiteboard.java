@@ -27,6 +27,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
@@ -139,6 +141,20 @@ public class Whiteboard extends JFrame
 		b10 = new JButton("Load");
 		t1 = new JTextField();
 		
+		t1.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {				
+			}
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+                updateTextChange(e);
+			}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+                updateTextChange(e); 
+			}
+		});
+	         
 		// Add rectangle
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -332,6 +348,16 @@ public class Whiteboard extends JFrame
     public void shapeRemoved(DShape shape) { 
         tableModel.removeAShapeModel(shape.getModel()); 
         updateTableSelect(null); 
+    }
+    
+    public void updateFont(String text, String font) { 
+        t1.setText(text); 
+    } 
+    
+    private void updateTextChange(DocumentEvent e) { 
+    	// If the shape selected is DText, do the update to text field
+        if(drawPane.isAShapeSelected() && drawPane.getSelectedShape() instanceof DText) 
+            drawPane.setText(t1.getText()); 
     } 
     
     //Opens a file by opening an array of things and then instantiating those
