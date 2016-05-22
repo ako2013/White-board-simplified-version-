@@ -2,37 +2,31 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Enumeration;
-
-import javax.swing.BorderFactory;
+import java.io.FileOutputStream;
+import java.util.List;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
-import javax.swing.event.TableColumnModelListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
+
 
 
 public class Whiteboard extends JFrame
@@ -40,8 +34,8 @@ public class Whiteboard extends JFrame
 	final int FRAME_WIDTH = 1000; 
 	final int FRAME_HEIGHT = 1000; 
 	private Canvas drawPane;
-	private Box vert, horz1, horz2, horz3, horz4, horz5;
-	private JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10;
+	private Box vert, horz1, horz2, horz3, horz4, horz5, horz6;
+	private JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13;
 	private JTable table;
 	private JTextField t1;
 	private	JSplitPane utilPane;
@@ -81,9 +75,9 @@ public class Whiteboard extends JFrame
 		board.setLayout(new BorderLayout());
 
 		//Set the Canvas and panel
-		JSplitPane  utilPane = new JSplitPane();
-		JPanel buttonPane = new JPanel();
-		JPanel infoPane = new JPanel();
+		utilPane = new JSplitPane();
+		buttonPane = new JPanel();
+		infoPane = new JPanel();
 	}
 	
 	private void createBoxes()
@@ -95,6 +89,7 @@ public class Whiteboard extends JFrame
 		horz3 = Box.createHorizontalBox();		
 		horz4 = Box.createHorizontalBox();	
 		horz5 = Box.createHorizontalBox();
+		horz6 = Box.createHorizontalBox();
 		
 		//Box Code and addition to buttonPane
 		vert.add(horz1);
@@ -113,6 +108,9 @@ public class Whiteboard extends JFrame
 		horz4.add(b8);	
 		horz5.add(b9);
 		horz5.add(b10);
+		horz5.add(b11);
+		horz6.add(b12);
+		horz6.add(b13);
 	}
 	
 	private void createTable()
@@ -137,6 +135,9 @@ public class Whiteboard extends JFrame
 		b8 = new JButton("Remove");
 		b9 = new JButton("Save");
 		b10 = new JButton("Load");
+		b11 = new JButton("Save Image");
+		b12 = new JButton("Server Start");
+		b13 = new JButton("Client Start");
 		t1 = new JTextField();
 		
 		// Add rectangle
@@ -223,6 +224,20 @@ public class Whiteboard extends JFrame
 		b9.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				DShapeModel[] list = null;
+				String result = JOptionPane.showInputDialog("File Name", null);
+				if (result != null) {
+					File f = new File(result);
+					save(f);
+				}
+			}
+		});
+		
+		//Load a WhiteBoard
+		b10.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{		
 				String result = JOptionPane.showInputDialog("File Name", null);
 				if (result != null) {
 					File f = new File(result);
@@ -231,13 +246,16 @@ public class Whiteboard extends JFrame
 			}
 		});
 		
-		//Load a Whiteborad
-		b10.addActionListener(new ActionListener() {
-			
+		//Save an Image
+		b11.addActionListener(new ActionListener() {			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void actionPerformed(ActionEvent e) 
+			{		
+				String result = JOptionPane.showInputDialog("File Name", null);
+				if (result != null) {
+					File f = new File(result);
+					saveImage(f);
+				}
 			}
 		});
 	}
@@ -338,16 +356,60 @@ public class Whiteboard extends JFrame
     public void open(File file)
     {
     	DShapeModel[] list = null;
-    	try {
+    	try 
+    	{
     		XMLDecoder xmlIn = new XMLDecoder(new BufferedInputStream( new FileInputStream (file)));
+    		list = (DShapeModel[]) xmlIn.readObject();
+    		xmlIn.close();
     	}
-    	catch (Exception ignored){}
+    	catch (Exception e)
+    	{
+    		System.out.println(e.getMessage());
+    	}
+    	for(DShapeModel m: list)
+    	{
+    		drawPane.addShape(m);
+    	}
+    	
     }
     
     //Saves a file by turning things into an xml file
-    public void save()
+    public void save(File file)
     {
-    	
+    	List<DShape> shapes = drawPane.getShapes();
+    	DShapeModel[] list = new DShapeModel[shapes.size()];
+    	for(int i = 0; i < list.length; i ++)
+    	{
+    		list[i] = shapes.get(i).getModel();
+    	}
+    	try
+    	{
+    		XMLEncoder xmlOut = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(file)));
+    		xmlOut.writeObject(list);
+    		xmlOut.close();
+    	}
+    	catch (Exception e)
+    	{
+    		System.out.println(e.getMessage());
+    	}
     }
      
+    public void saveImage(File file)
+    {
+    	BufferedImage image = (BufferedImage) createImage(drawPane.getWidth(), drawPane.getHeight());
+    	Graphics g = image.getGraphics();
+    	paintAll(drawPane.getGraphics());
+    	g.dispose();
+    	try 
+    	{
+			javax.imageio.ImageIO.write(image, "PNG", file);
+		} 
+    	catch (Exception e) 
+    	{
+			System.out.println(e.getMessage());
+		}
+    	
+    }
+    
+  
 }
