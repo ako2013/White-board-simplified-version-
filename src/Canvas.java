@@ -189,11 +189,17 @@ public class Canvas extends JPanel
             }
         });
 	}
+<<<<<<< HEAD
    
 	/**
 	 * Allows a shape to be moved on the canvas
 	 */
    public void dragShape()
+=======
+   // drag shape
+   int point = -1;
+   private void dragShape()
+>>>>>>> origin/master
    {
       addMouseMotionListener(new MouseAdapter() 
 		{ 
@@ -218,14 +224,19 @@ public class Canvas extends JPanel
                      repaint();
                   }
                   //if a knob is clicked on
-                  //move it
+                  //resize the shape
                   if(isAKnobSelected == true && isAShapeSelected == false)
                   {
-                     selectedKnob.moveShape(dx,dy);
-                     //DShapeModel s = selectedKnob.getModel();
-                     //selectedShape.changeShape(dx,dy);
-                     if(selectedShape == null) System.out.println("NULL");
-                     if(selectedShape != null) System.out.println("NOT NULL");
+                     for(int i = 0; i <4;i++)
+                     {
+                        if(selectedKnob == pointList.get(i)){
+                           point = i;
+                           break;
+                        }
+                     }             
+                     selectedShape.resizeShape(point+1,dx,dy);
+                     createKnob(selectedShape);
+                     whiteboard.updateTableSelect(selectedShape);
                      repaint();
                   }
                   x += dx;
@@ -234,6 +245,19 @@ public class Canvas extends JPanel
                }
             }
       });
+   }
+   private void createKnob(DShape shape)
+   {
+      pointList = new LinkedList<>();
+      ArrayList<Point> point = selectedShape.getKnob();               
+      DRectModel d;
+      for(int i = 0; i <= 3;i++)
+      {
+         Point p2 = point.get(i);
+         d = new DRectModel(p2.x, p2.y, 9, 9, Color.BLACK);
+         DShape shape2 = new DRect(d);
+         pointList.add(shape2);
+      }  
    }
 	
 	/**
