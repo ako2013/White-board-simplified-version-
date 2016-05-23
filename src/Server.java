@@ -17,7 +17,6 @@ import java.util.List;
 public class Server extends Thread
 {
 	private Canvas c;
-	private String hostIP;
 	private int port;
 	private ServerSocket s;
 	private List<ObjectOutputStream> outputs;
@@ -25,15 +24,14 @@ public class Server extends Thread
 	public Server(Canvas c) throws UnknownHostException, IOException
 	{
 		this.c = c;
-		this.hostIP = "127.0.0.1";
+		port = 39587;
 		s = new ServerSocket(port);
 		outputs = new ArrayList<>();
 	}
 	
-	public Server(Canvas c, String hostIP, int port) throws UnknownHostException, IOException
+	public Server(Canvas c, int port) throws UnknownHostException, IOException
 	{
 		this.c = c;
-		this.hostIP = hostIP;
 		this.port = port;
 		s = new ServerSocket(port);
 		outputs = new ArrayList<>();
@@ -58,7 +56,7 @@ public class Server extends Thread
         }
     }
 
- // Sends a message to all of the outgoing streams.
+    // Sends a message to all of the outgoing streams.
     // Writing rarely blocks, so doing this on the swing thread is ok,
     // although could fork off a worker to do it.
     public synchronized void send() 

@@ -19,6 +19,7 @@ public class Client extends Thread
 	{
 		this.c = c;
 		this.hostIP = "127.0.0.1";
+		this.port = 39587;
 		s = new Socket(hostIP, port);
 	}
 	
@@ -37,18 +38,18 @@ public class Client extends Thread
 			try
 			{
 				ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-					while (true) 
-					{
-						String xmlString = (String) in.readObject();
-						XMLDecoder xmlIn = new XMLDecoder(new BufferedInputStream( new FileInputStream (xmlString)));
-			    		DShapeModel[] list = (DShapeModel[]) xmlIn.readObject();
-			    		xmlIn.close();
-			    		for(DShapeModel d: list)
-			    		{
-			    			c.addShape(d);
-			    		}
-			    		c.repaint();
-					}
+				while (true) 
+				{
+					String xmlString = (String) in.readObject();
+					XMLDecoder xmlIn = new XMLDecoder(new BufferedInputStream( new FileInputStream (xmlString)));
+			   		DShapeModel[] list = (DShapeModel[]) xmlIn.readObject();
+			   		xmlIn.close();
+			   		for(DShapeModel d: list)
+			   		{
+			   			c.addShape(d);
+			   		}
+			   		c.repaint();
+				}
 			}
 			catch (Exception e)
 			{

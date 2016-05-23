@@ -109,11 +109,7 @@ public class DShapeModel {
        if (this instanceof DLineModel) {
          Point p1 = new Point(shapeBound.x + xDirection, shapeBound.y + yDirection);
          Point p2 = new Point(shapeBound.x + shapeBound.width + xDirection, shapeBound.y + shapeBound.height + yDirection);
-         System.out.println("P1: "+shapeBound.x + xDirection+", "+shapeBound.y + yDirection);
-         System.out.println("P2: "+shapeBound.x + shapeBound.width + xDirection+", "+shapeBound.y + shapeBound.height + yDirection);
-
          this.setPoints(p1, p2);
-         System.out.println("IM A LINE");
        } else {
        
 		   shapeBound.x += xDirection; 

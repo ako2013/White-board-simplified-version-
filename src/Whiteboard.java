@@ -55,7 +55,7 @@ public class Whiteboard extends JFrame
 	private JScrollPane scrollpane;
 	private StringTableModel tableModel;
 	private ArrayList<JButton> buttons;
-	private boolean server;
+	private Server server;
 	
 	public static void main(String[] args)
 	{
@@ -74,7 +74,6 @@ public class Whiteboard extends JFrame
 		createBoxes();		
 		setUtilPane();
 		fillCanvas();
-		server = false;
 	}	
 	
 	private void setCanvasAndPanel()
@@ -168,11 +167,7 @@ public class Whiteboard extends JFrame
 		b13 = new JButton("Client Start");
 		buttons.add(b13);
 		t1 = new JTextField();
-		
-<<<<<<< HEAD
-		
-		
-=======
+
 		t1.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {				
@@ -186,14 +181,17 @@ public class Whiteboard extends JFrame
                 updateTextChange(e); 
 			}
 		});
-	         
->>>>>>> origin/master
+
 		// Add rectangle
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DRectModel d = new DRectModel(100, 100, 100, 100, Color.GRAY);
 				drawPane.addShape(d);
 				drawPane.repaint();
+				if(server != null)
+				{
+					server.send();
+				}
 			}
 		});
 		
@@ -203,6 +201,10 @@ public class Whiteboard extends JFrame
 				DOvalModel d = new DOvalModel(300, 300, 100, 100, Color.GRAY);
 				drawPane.addShape(d);
 				drawPane.repaint();
+				if(server != null)
+				{
+					server.send();
+				}
 			}
 		});
 		
@@ -215,6 +217,10 @@ public class Whiteboard extends JFrame
 				d.setPoints(p1, p2);
 				drawPane.addShape(d);
 				drawPane.repaint();
+				if(server != null)
+				{
+					server.send();
+				}
 			}
 		});
 		
@@ -236,7 +242,12 @@ public class Whiteboard extends JFrame
             }
 				drawPane.addShape(d);
 				drawPane.repaint();
+				if(server != null)
+				{
+					server.send();
+				}
 			}
+			
 		});
       		
 		//Set color
@@ -248,6 +259,10 @@ public class Whiteboard extends JFrame
                 if (selectedColor != null) {
                 	drawPane.recolorShape(selectedColor);	
                 }
+                if(server != null)
+				{
+					server.send();
+				}
 			}
 		});
 		
@@ -256,6 +271,10 @@ public class Whiteboard extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e) {
                 drawPane.moveSelectedShapeToFront();
+                if(server != null)
+				{
+					server.send();
+				}
 			}
 		});
 		
@@ -264,6 +283,10 @@ public class Whiteboard extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				drawPane.moveSelectedShapeToBack();
+				if(server != null)
+				{
+					server.send();
+				}
 			}
 		});
 				
@@ -275,6 +298,10 @@ public class Whiteboard extends JFrame
 				if (drawPane.isAShapeSelected()) {
 					drawPane.removeShape();	
 					repaint();
+					if(server != null)
+					{
+						server.send();
+					}
 				}				
 			}
 		});
@@ -458,14 +485,8 @@ public class Whiteboard extends JFrame
     	{
     		System.out.println("ADD");
     		drawPane.addShape(m);
-<<<<<<< HEAD
     	}
-    	drawPane.repaint();
-=======
-    	}   
-		drawPane.repaint();
->>>>>>> origin/master
-    	
+    	drawPane.repaint();    	
     }
     
     //Saves a file by turning things into an xml file
@@ -508,11 +529,50 @@ public class Whiteboard extends JFrame
     
     public void serverStart()
     {
-    	server = true;
+    	board.setTitle(getTitle() + " Server");
+    	for(ActionListener al: b12.getActionListeners())
+    	{
+    		b12.removeActionListener(al);
+    	}
+    	for(ActionListener al: b13.getActionListeners())
+    	{
+    		b13.removeActionListener(al);
+    	}
+    	String s = (String)JOptionPane.showInputDialog("Port");
+    	if (!s.equals(""))
+    	{
+    		try
+    		{
+    			Scanner in = new Scanner(s);
+    			in.useDelimiter(":");
+    			int port = Integer.parseInt(in.next());
+    			server = new Server(drawPane, port);
+    			in.close();
+    		}
+    		catch(Exception e)
+    		{
+    			JOptionPane.showMessageDialog(drawPane, "Invalid Port");
+    			serverStart();
+    		}	
+    	}
+    	else
+    	{
+    		try
+    		{
+    			server = new Server(drawPane);
+    			server.start();
+    		}
+    		catch(Exception e)
+    		{
+    			JOptionPane.showMessageDialog(drawPane, "Default port 39587 is busy");
+    			serverStart();
+    		}
+    	}
     }
     
     public void clientStart()
     {
+    	board.setTitle(getTitle() + " Client"); 
     	for(JButton b: buttons)
     	{
     		for(ActionListener al: b.getActionListeners())
@@ -530,6 +590,7 @@ public class Whiteboard extends JFrame
     			String hostIP = in.next();
     			int port = Integer.parseInt(in.next());
     			Client c = new Client(drawPane, hostIP, port);
+    			c.start();
     			in.close();
     		}
     		catch(Exception e)
@@ -543,6 +604,7 @@ public class Whiteboard extends JFrame
     		try
     		{
     			Client c = new Client(drawPane);
+    			c.start();
     		}
     		catch(Exception e)
     		{
