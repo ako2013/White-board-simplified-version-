@@ -74,6 +74,10 @@ public class Canvas extends JPanel
         whiteboard.addShapeToTable(shape); 
         // Add to shape list
         shapeList.add(shape); 
+        if(whiteboard.isServer())
+		{
+			whiteboard.getServer().send();
+		}
 		
 	}
 	
@@ -87,6 +91,10 @@ public class Canvas extends JPanel
 		{
 			selectedShape.setColor(color);
 			repaint();
+			if(whiteboard.isServer())
+			{
+				whiteboard.getServer().send();
+			}
 		}
 	}
 	
@@ -95,37 +103,41 @@ public class Canvas extends JPanel
 	 * @param clickedPoint The point that was clicked
 	 */
 	public void selectObjectForClick(Point clickedPoint) {
-		 lastX = clickedPoint.x; 
-	    lastY = clickedPoint.y; 
-	    movingPoint = null; 
+		if(!whiteboard.isClient())
+		{
+			lastX = clickedPoint.x; 
+			lastY = clickedPoint.y; 
+			movingPoint = null; 
 	    
-	    // Check to see if a shape is clicked on and set selectedShape
-	    if(movingPoint == null) 
-	    {
-	    	selectedShape = null;
-	    	for(DShape shape : shapeList) 
-	    	{
-	    		if(shape.isInBoundOfPoint(clickedPoint)) 
-	    		{
-	    			isAShapeSelected = true;
-	    			selectedShape = shape;
-               isAKnobSelected = false;
-	    		}
-	    	}
-         selectedKnob = null;
-         if(pointList != null){
-            for(DShape point : pointList)
-            {
-               if(point.isInBoundOfPoint(clickedPoint))
-               {  
-                  isAKnobSelected = true;
-                  selectedKnob = point;
-                  isAShapeSelected = false;
-               }
-            }
-         }
+			// Check to see if a shape is clicked on and set selectedShape
+			if(movingPoint == null) 
+			{
+				selectedShape = null;
+				for(DShape shape : shapeList) 
+				{
+					if(shape.isInBoundOfPoint(clickedPoint)) 
+					{
+						isAShapeSelected = true;
+						selectedShape = shape;
+						isAKnobSelected = false;
+					}
+				}
+				selectedKnob = null;
+				if(pointList != null){
+					for(DShape point : pointList)
+					{
+						if(point.isInBoundOfPoint(clickedPoint))
+						{  
+							isAKnobSelected = true;
+							selectedKnob = point;
+							isAShapeSelected = false;
+						}
+					}
+				}
+			}
+			repaint();
 	    }
-	    repaint();
+	   
 	}
 	
 	/**
@@ -216,6 +228,10 @@ public class Canvas extends JPanel
                      }
                      whiteboard.updateTableSelect(selectedShape);
                      repaint();
+                     if(whiteboard.isServer())
+         			{
+         				whiteboard.getServer().send();
+         			}
                   }
                   //if a knob is clicked on
                   //resize the shape
@@ -238,6 +254,10 @@ public class Canvas extends JPanel
                      createKnob(selectedShape);
                      whiteboard.updateTableSelect(selectedShape);
                      repaint();
+                     if(whiteboard.isServer())
+     				 {
+     					whiteboard.getServer().send();
+     				 }
                   }
                   x += dx;
                   y += dy;
@@ -270,6 +290,10 @@ public class Canvas extends JPanel
 			shapeList.add(selectedShape);
 	        whiteboard.shapeMovedFront(selectedShape); 
 			repaint();
+			if(whiteboard.isServer())
+			{
+				whiteboard.getServer().send();
+			}
 		}
 	}
 	
@@ -284,11 +308,17 @@ public class Canvas extends JPanel
 			shapeList.add(0, selectedShape);
 	        whiteboard.shapeMovedBack(selectedShape); 
 			repaint();
+			{
+				if(whiteboard.isServer())
+				{
+					whiteboard.getServer().send();
+				}
+			}
 		}
 	}	
 	
 	/**
-	 * // Remove the currently selected shape
+	 *  Remove the currently selected shape
 	 */
 	public void removeShape() 
 	{ 
@@ -297,6 +327,10 @@ public class Canvas extends JPanel
 			shapeList.remove(selectedShape); 
 	        whiteboard.shapeRemoved(selectedShape); 
 			repaint();
+			if(whiteboard.isServer())
+			{
+				whiteboard.getServer().send();
+			}
 		}
     } 
 	
@@ -307,6 +341,10 @@ public class Canvas extends JPanel
 	public void setText(String text) {
 		((DText) selectedShape).setText(text);
 		repaint();
+		if(whiteboard.isServer())
+		{
+			whiteboard.getServer().send();
+		}
 	}
 	
 	/**
@@ -343,9 +381,13 @@ public class Canvas extends JPanel
 	
 	/**
 	 * Resets the canvas
-	 */
+	 */	
 	public void resetShapes()
 	{
+		for(DShape d: shapeList)
+		{
+			whiteboard.shapeRemoved(d);
+		}
 		shapeList = new LinkedList<>();
 	}
 }

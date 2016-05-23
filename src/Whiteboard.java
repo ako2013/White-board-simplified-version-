@@ -615,8 +615,40 @@ public class Whiteboard extends JFrame
     		}
     	}
     }
-    	
     
+    /**
+     * Checks to see if the server has started
+     * @return True if server is not null false otherwise
+     */
+    public boolean isServer()
+    {
+    	if (server != null)
+    	{
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /**
+     * Checks to see if the server has started
+     * @return True if server is not null false otherwise
+     */
+    public boolean isClient()
+    {
+    	if (client != null)
+    	{
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /**
+     * returns the server for server commands
+     */
+    public Server getServer()
+    {
+    	return this.server;
+    }
     
   
 }
