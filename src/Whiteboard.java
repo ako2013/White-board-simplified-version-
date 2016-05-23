@@ -56,6 +56,7 @@ public class Whiteboard extends JFrame
 	private StringTableModel tableModel;
 	private ArrayList<JButton> buttons;
 	private Server server;
+	private Client client;
 	
 	public static void main(String[] args)
 	{
@@ -547,6 +548,7 @@ public class Whiteboard extends JFrame
     			in.useDelimiter(":");
     			int port = Integer.parseInt(in.next());
     			server = new Server(drawPane, port);
+    			server.start();
     			in.close();
     		}
     		catch(Exception e)
@@ -589,8 +591,8 @@ public class Whiteboard extends JFrame
     			in.useDelimiter(":");
     			String hostIP = in.next();
     			int port = Integer.parseInt(in.next());
-    			Client c = new Client(drawPane, hostIP, port);
-    			c.start();
+    			client = new Client(drawPane, hostIP, port);
+    			client.start();
     			in.close();
     		}
     		catch(Exception e)
@@ -603,8 +605,8 @@ public class Whiteboard extends JFrame
     	{
     		try
     		{
-    			Client c = new Client(drawPane);
-    			c.start();
+    			client = new Client(drawPane);
+    			client.start();
     		}
     		catch(Exception e)
     		{

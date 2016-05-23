@@ -40,15 +40,18 @@ public class Client extends Thread
 				ObjectInputStream in = new ObjectInputStream(s.getInputStream());
 				while (true) 
 				{
-					String xmlString = (String) in.readObject();
-					XMLDecoder xmlIn = new XMLDecoder(new BufferedInputStream( new FileInputStream (xmlString)));
+					String xmlString = (String) in.readObject();					
+					XMLDecoder xmlIn = new XMLDecoder(new ByteArrayInputStream(xmlString.getBytes()));
+					System.out.println("got here");
 			   		DShapeModel[] list = (DShapeModel[]) xmlIn.readObject();
-			   		xmlIn.close();
+			   		System.out.println("got here");
 			   		for(DShapeModel d: list)
 			   		{
+			   			System.out.println("here");
 			   			c.addShape(d);
 			   		}
 			   		c.repaint();
+			   		xmlIn.close();
 				}
 			}
 			catch (Exception e)
