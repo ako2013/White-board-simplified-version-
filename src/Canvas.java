@@ -22,7 +22,7 @@ public class Canvas extends JPanel
 	private Point movingPoint; 
 	private Point anchorPoint; 
 	private boolean isAShapeSelected;
-	private boolean isAKnobSelected;
+	private boolean isAKnobSelected = false;
 	private LinkedList<DShape> pointList;
 	private DShape selectedKnob; 
  
@@ -92,8 +92,21 @@ public class Canvas extends JPanel
 	    		{
 	    			isAShapeSelected = true;
 	    			selectedShape = shape;
+               isAKnobSelected = false;
 	    		}
 	    	}
+         selectedKnob = null;
+         if(pointList != null){
+            for(DShape point : pointList)
+            {
+               if(point.isInBoundOfPoint(clickedPoint))
+               {  
+                  isAKnobSelected = true;
+                  selectedKnob = point;
+                  isAShapeSelected = false;
+               }
+            }
+         }
 	    }
 	    repaint();
 	} 
@@ -131,18 +144,21 @@ public class Canvas extends JPanel
                y = p.y;
                
                try{
-                     pointList = new LinkedList<>();
-                     ArrayList<Point> point = selectedShape.getKnob();               
-                     DRectModel d;
-                     for(int i = 0; i <= 3;i++)
-                     {
-                        Point p2 = point.get(i);
-                        d = new DRectModel(p2.x, p2.y, 9, 9, Color.BLACK);
-                        DShape shape = new DRect(d);
-                        pointList.add(shape);
+                     if(isAShapeSelected == true){
+                        pointList = new LinkedList<>();
+                        ArrayList<Point> point = selectedShape.getKnob();               
+                        DRectModel d;
+                        for(int i = 0; i <= 3;i++)
+                        {
+                           Point p2 = point.get(i);
+                           d = new DRectModel(p2.x, p2.y, 9, 9, Color.BLACK);
+                           DShape shape = new DRect(d);
+                           pointList.add(shape);
+                        }
                      } 
                }catch(Exception execp){
-               }       
+               }  
+                    
             }
         });
 	}
@@ -160,7 +176,7 @@ public class Canvas extends JPanel
                   int dy = p.y-y;
                   //if a shape is clicked on
                   //drag it
-                  if(isAShapeSelected){
+                  if(isAShapeSelected == true && isAKnobSelected == false){
                      selectedShape.moveShape(dx,dy);
                      for(int i = 0;i <4;i++)
                      {
@@ -171,11 +187,19 @@ public class Canvas extends JPanel
                      whiteboard.updateTableSelect(selectedShape);
                      repaint();
                   }
-                  x += dx;
-                  y += dy;
-                  
                   //if a knob is clicked on
                   //move it
+                  if(isAKnobSelected == true && isAShapeSelected == false)
+                  {
+                     selectedKnob.moveShape(dx,dy);
+                     //DShapeModel s = selectedKnob.getModel();
+                     //selectedShape.changeShape(dx,dy);
+                     if(selectedShape == null) System.out.println("NULL");
+                     if(selectedShape != null) System.out.println("NOT NULL");
+                     repaint();
+                  }
+                  x += dx;
+                  y += dy;
                }catch (Exception e2){
                }
             }
@@ -222,6 +246,7 @@ public class Canvas extends JPanel
 		repaint();
 	}
 	
+   //paint the shapes
 	@Override
 	protected void paintComponent(Graphics g) 
 	{
