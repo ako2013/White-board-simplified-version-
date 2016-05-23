@@ -9,44 +9,76 @@ public class DShapeModel {
 	private Color color;
     protected ArrayList<ModelListener> listeners; 
     private int index;
-    
+   /*
+   * Construtor for DShapeModel - Default
+   * set the bound using Rectangle
+   */ 
 	public DShapeModel() 
 	{
 		shapeBound = new Rectangle(0, 0, 0, 0);
 		this.color = Color.gray;
 	}
-	
+	/*
+   * Constructor for DShapeModel
+   * @param x takes in the x coordinate
+   * @param y takes in the y coordinate
+   * @param width takes in the width of the shape
+   * @param height takes in the height of the shape
+   * @param color takes in the color of the shape
+   */
 	public DShapeModel(int x, int y, int width, int height, Color color) 
 	{
 		this.shapeBound = new Rectangle(x, y, width, height);
 		this.color = color;
 	}
-	
+	/*
+   * This method set the index for the object
+   */
 	public void setIndex(int index)
 	{
 		this.index = index;
 	}
-	
+	/*
+   * This method get the index of the object
+   * @return the index number as an integer
+   */
 	public int getIndex()
 	{
 		return this.index;
 	}
-
+  /*
+   * This method set the bounds to draw a Shape using coordinates and pixels 
+   * @param x takes in the x coordinate
+   * @param y takes in the y coordinate
+   * @param width takes in the width of the shape
+   * @param height takes in the height of the shape
+   */
 	public void setBounds(int x, int y, int width, int height) 
 	{
 		this.shapeBound = new Rectangle(x, y, width, height);
 	}
-	
+  /*
+   * This method set bounds using a Rectangle bounds
+   * @param bounds takes in a Rectangle
+  */
 	public void setBounds(Rectangle bounds) 
 	{ 
 		this.shapeBound = new Rectangle(bounds);
 	} 
-	
+  /*
+   * This method get the bounds of the shape
+   * @return the bound of Shape
+   *
+  */
 	public Rectangle getBounds()
 	{
 		return shapeBound;
 	}
-	
+  /*
+   * This method set the points on the shape
+   * @param p1 takes in frist Point
+   * @param p2 takes in second Point
+  */
 	public void setPoints(Point p1, Point p2) { 
 		int x, y;
 		
@@ -70,27 +102,37 @@ public class DShapeModel {
 		// Set rectangle bounds for the 2 points (line)
 		setBounds(new Rectangle(x, y, width, height));
 	}
-	   
+  /*
+   * This method set the color of an instance of Shape
+  */
 	public void setColor(Color color) 
 	{
 		this.color = color;
 	}
-
+  /*
+   * This method get the color of an instance of Shapes
+  */
 	public Color getColor()
 	{
 		return this.color;
 	}
-	
+  /*
+   * This method implements listener for the object
+  */
 	 public void addListener(ModelListener listener) 
 	 { 
 		 listeners.add(listener); 
 	 }
-	 
+  /*
+   * This method remove the implementation of listener for the object
+  */
 	 public boolean removeListener(ModelListener listener)
 	 { 
 		 return listeners.remove(listener); 
 	 } 
-	 
+	/*
+   * This method will prompt the notifications when listeners are used
+  */
 	 public void notifyListeners()
 	 { 
        try{
@@ -102,8 +144,11 @@ public class DShapeModel {
          //System.out.println("");
        }
 	 } 
-	 
-	 // Change shape position based on moved position
+  /*
+   * Method to move an instace of Shape
+   * @param xDirection takes in the x coordinates
+   * @param yDirection takes in the y cooridnates
+  */
 	 public void moveShape(int xDirection, int yDirection)
 	 {
        if (this instanceof DLineModel) {
