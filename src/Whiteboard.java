@@ -29,8 +29,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
-
+import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 public class Whiteboard extends JFrame
 {
@@ -161,8 +169,25 @@ public class Whiteboard extends JFrame
 		buttons.add(b13);
 		t1 = new JTextField();
 		
+<<<<<<< HEAD
 		
 		
+=======
+		t1.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {				
+			}
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+                updateTextChange(e);
+			}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+                updateTextChange(e); 
+			}
+		});
+	         
+>>>>>>> origin/master
 		// Add rectangle
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -196,13 +221,24 @@ public class Whiteboard extends JFrame
 		// Add text
 		b4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+            //get text from textfield
+            String s = t1.getText();
+            //dynamically resize rect to fit the length of the text
+            int len = s.length()*7+10;
 				DTextModel d = new DTextModel();
-				d.setBounds(0, 0, 50, 50);
+            //if textfield is empty use default text
+            if(!s.isEmpty()){
+               d.setText(s);
+               d.setBounds(10, 10, len, 40);
+            }
+            else{
+				   d.setBounds(10, 10, 50, 50);
+            }
 				drawPane.addShape(d);
 				drawPane.repaint();
 			}
 		});
-		
+      		
 		//Set color
 		b5.addActionListener(new ActionListener() {
 			@Override
@@ -392,6 +428,16 @@ public class Whiteboard extends JFrame
     public void shapeRemoved(DShape shape) { 
         tableModel.removeAShapeModel(shape.getModel()); 
         updateTableSelect(null); 
+    }
+    
+    public void updateFont(String text, String font) { 
+        t1.setText(text); 
+    } 
+    
+    private void updateTextChange(DocumentEvent e) { 
+    	// If the shape selected is DText, do the update to text field
+        if(drawPane.isAShapeSelected() && drawPane.getSelectedShape() instanceof DText) 
+            drawPane.setText(t1.getText()); 
     } 
     
     //Opens a file by opening an array of things and then instantiating those
@@ -410,9 +456,15 @@ public class Whiteboard extends JFrame
     	}
     	for(DShapeModel m: list)
     	{
+    		System.out.println("ADD");
     		drawPane.addShape(m);
+<<<<<<< HEAD
     	}
     	drawPane.repaint();
+=======
+    	}   
+		drawPane.repaint();
+>>>>>>> origin/master
     	
     }
     

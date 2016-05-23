@@ -30,13 +30,18 @@ public abstract class DShape implements ModelListener {
 	@Override
 	public void modelChanged(DShapeModel shapeModel)
 	{
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method       	
 	}
 	public void moveShape(int dx, int dy) 
 	{
 		dShapeModel.moveShape(dx, dy); 
 	} 
+   public void changeShape(int dx,int dy)
+   {
+      System.out.println("IN HERE");
+     //dShapeModel.setBounds(dShapeModel.getBounds().x,dShapeModel.getBounds().y,dShapeModel.getBounds().width+dx,
+     //dShapeModel.getBounds().height+dy);
+   }
 	public boolean isInBoundOfPoint(Point pt)
 	{ 
         Rectangle bounds = getBounds(); 
@@ -56,7 +61,7 @@ public abstract class DShape implements ModelListener {
         Point p2 = new Point(r.x+r.width,r.y-9);
         Point p3 = new Point(r.x-9,r.y+r.height);
         Point p4 = new Point(r.x+r.width,r.y+r.height);
-        
+      
         knobs.add(p1);
         knobs.add(p2);
         knobs.add(p3);

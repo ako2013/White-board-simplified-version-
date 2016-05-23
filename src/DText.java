@@ -41,6 +41,13 @@ public class DText extends DShape {
         DTextModel model = (DTextModel) getModel();
 		return model.getText();
 	}
+	
+	public void setText(String text)
+	{
+        DTextModel model = (DTextModel) getModel();
+		model.setText(text);
+	}
+	
 	public String getFont() 
 	{
 		DTextModel model = (DTextModel) getModel();
