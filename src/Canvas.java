@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.MouseMotionListener;
-
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+/**
+ * The Canvas class that stores a running list of all the objects within the Canvas
+ * The canvas also provides operations to those objects
+ */
 public class Canvas extends JPanel
 {
 	private final int DEFAULT_LENGTH = 400; 
@@ -26,6 +29,10 @@ public class Canvas extends JPanel
 	private LinkedList<DShape> pointList;
 	private DShape selectedKnob; 
  
+	/**
+	 * Constructor for the Canvas
+	 * @param whiteBoard The frame to add the canvas to
+	 */
 	public Canvas(Whiteboard whiteBoard)
 	{
 		this.whiteboard = whiteBoard;
@@ -36,7 +43,10 @@ public class Canvas extends JPanel
       dragShape();
 	}
 	
-	// Add a new shape to the linked list
+	/**
+	 * Adds a shape to the canvas
+	 * @param dShapeModel the shape to add
+	 */
 	public void addShape(DShapeModel dShapeModel)
 	{
 		DShape shape = null; 
@@ -67,7 +77,10 @@ public class Canvas extends JPanel
 		
 	}
 	
-	// Re-color the currently selected shape
+	/**
+	 * Allows the selected shape to be recolored
+	 * @param color the color to change to
+	 */
 	public void recolorShape(Color color) 
 	{
 		if (isAShapeSelected) 
@@ -77,6 +90,10 @@ public class Canvas extends JPanel
 		}
 	}
 	
+	/**
+	 * Selects an object
+	 * @param clickedPoint The point that was clicked
+	 */
 	public void selectObjectForClick(Point clickedPoint) {
 		 lastX = clickedPoint.x; 
 	    lastY = clickedPoint.y; 
@@ -109,8 +126,12 @@ public class Canvas extends JPanel
          }
 	    }
 	    repaint();
-	} 
-	// Return true if a valid shade is selected, false otherwise
+	}
+	
+	/**
+	 * Checks whether a shape is slected
+	 * @return Return true if a valid shade is selected, false otherwise
+	 */
 	public boolean isAShapeSelected() 
 	{
 		isAShapeSelected = false;
@@ -122,7 +143,10 @@ public class Canvas extends JPanel
 		return isAShapeSelected;
 	}
 	
-	// Return the currently selected shape
+	/**
+	 * gets the currently selected shape
+	 * @return The shape currently selected
+	 */
 	public DShape getSelectedShape() 
 	{ 
         return selectedShape; 
@@ -132,6 +156,9 @@ public class Canvas extends JPanel
    private int x =0;
    private int y =0;
    
+   /**
+    * Sets the canvas mouse listener
+    */
 	private void setCanvasOnClickListener()
 	{
 		addMouseListener(new MouseAdapter() 
@@ -162,9 +189,17 @@ public class Canvas extends JPanel
             }
         });
 	}
+<<<<<<< HEAD
+   
+	/**
+	 * Allows a shape to be moved on the canvas
+	 */
+   public void dragShape()
+=======
    // drag shape
    int point = -1;
    private void dragShape()
+>>>>>>> origin/master
    {
       addMouseMotionListener(new MouseAdapter() 
 		{ 
@@ -225,7 +260,9 @@ public class Canvas extends JPanel
       }  
    }
 	
-	// Move selected shape to the front
+	/**
+	 * Moves the selected shape to the front of the canvas
+	 */
 	public void moveSelectedShapeToFront() 
 	{
 		if (isAShapeSelected) {
@@ -236,7 +273,9 @@ public class Canvas extends JPanel
 		}
 	}
 	
-	// Move selected shape to the back
+	/**
+	 * Moves the selected shape to the back of the canvas
+	 */
 	public void moveSelectedShapeToBack() 
 	{
 		if (isAShapeSelected) 
@@ -248,7 +287,9 @@ public class Canvas extends JPanel
 		}
 	}	
 	
-	// Remove the currently selected shape
+	/**
+	 * // Remove the currently selected shape
+	 */
 	public void removeShape() 
 	{ 
 		if (isAShapeSelected) 
@@ -259,13 +300,18 @@ public class Canvas extends JPanel
 		}
     } 
 	
-	// Change text of currently selected shape
+	/**
+	 * Change text of currently selected shape 
+	 * @param text the text to change to
+	 */
 	public void setText(String text) {
 		((DText) selectedShape).setText(text);
 		repaint();
 	}
 	
-   //paint the shapes
+	/**
+    * paint the shapes
+    */
 	@Override
 	protected void paintComponent(Graphics g) 
 	{
@@ -286,11 +332,18 @@ public class Canvas extends JPanel
 
 	}
 	
+	/**
+	 * Gets the list of shapes of the canvas
+	 * @return The Canvas's list of shapes
+	 */
 	public List<DShape> getShapes()
 	{
 		return shapeList;
 	}
 	
+	/**
+	 * Resets the canvas
+	 */
 	public void resetShapes()
 	{
 		shapeList = new LinkedList<>();

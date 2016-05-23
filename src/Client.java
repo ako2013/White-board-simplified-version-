@@ -42,12 +42,10 @@ public class Client extends Thread
 				{
 					String xmlString = (String) in.readObject();					
 					XMLDecoder xmlIn = new XMLDecoder(new ByteArrayInputStream(xmlString.getBytes()));
-					System.out.println("got here");
 			   		DShapeModel[] list = (DShapeModel[]) xmlIn.readObject();
-			   		System.out.println("got here");
+			   		c.resetShapes();
 			   		for(DShapeModel d: list)
 			   		{
-			   			System.out.println("here");
 			   			c.addShape(d);
 			   		}
 			   		c.repaint();
