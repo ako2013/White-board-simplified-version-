@@ -188,18 +188,12 @@ public class Canvas extends JPanel
                     
             }
         });
-	}
-<<<<<<< HEAD
-   
+	}   
 	/**
 	 * Allows a shape to be moved on the canvas
 	 */
-   public void dragShape()
-=======
-   // drag shape
    int point = -1;
    private void dragShape()
->>>>>>> origin/master
    {
       addMouseMotionListener(new MouseAdapter() 
 		{ 
