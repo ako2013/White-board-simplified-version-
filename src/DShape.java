@@ -36,11 +36,36 @@ public abstract class DShape implements ModelListener {
 	{
 		dShapeModel.moveShape(dx, dy); 
 	} 
-   public void changeShape(int dx,int dy)
+   public void resizeShape(int point,int dx, int dy)
    {
-      System.out.println("IN HERE");
-     //dShapeModel.setBounds(dShapeModel.getBounds().x,dShapeModel.getBounds().y,dShapeModel.getBounds().width+dx,
-     //dShapeModel.getBounds().height+dy);
+       //cooridnates of the shape
+       int x = dShapeModel.getBounds().x;
+       int y = dShapeModel.getBounds().y;
+       int w = dShapeModel.getBounds().width;
+       int h = dShapeModel.getBounds().height;
+       
+       if(point == 1){
+         x += dx;
+         y += dy;
+         h += dy * (-1);
+         w += dx * (-1);
+       }
+       else if(point == 2){
+         y += dy;
+         w += dx;
+         h += dy*(-1);
+       }
+       else if(point == 3){
+         h += dy;
+         x += dx;
+         w += dx*(-1);
+       
+       }
+       else if(point == 4){
+         h += dy;
+         w += dx;
+       }
+       dShapeModel.setBounds(x,y,w,h);
    }
 	public boolean isInBoundOfPoint(Point pt)
 	{ 
@@ -57,10 +82,11 @@ public abstract class DShape implements ModelListener {
         try{
         knobs = new ArrayList<Point>();
         Rectangle r = dShapeModel.getBounds();
-        Point p1 = new Point(r.x-9,r.y-9);
-        Point p2 = new Point(r.x+r.width,r.y-9);
-        Point p3 = new Point(r.x-9,r.y+r.height);
-        Point p4 = new Point(r.x+r.width,r.y+r.height);
+        
+        Point p1 = new Point(r.x,r.y);
+        Point p2 = new Point(r.x+r.width-9,r.y);
+        Point p3 = new Point(r.x,r.y+r.height-9);
+        Point p4 = new Point(r.x+r.width-9,r.y+r.height-9);
       
         knobs.add(p1);
         knobs.add(p2);
