@@ -163,6 +163,51 @@ public class DShapeModel {
 		 
 		 // Send notification to the shape that a model has changed
 	     notifyListeners(); 
-	 }   
+	 } 
+    public void resizeShape(int point, int dx, int dy)
+    {
+      //cooridnates of the shape
+       int x = shapeBound.x;
+       int y = shapeBound.y;
+       int w = shapeBound.width;
+       int h = shapeBound.height;
+       //resize based on knob position
+       //
+       // p1_______p2
+       // |        |
+       // |        |
+       // |        |
+       // p3_______p4
+       //
+       if(point == 1){
+         x += dx;
+         y += dy;
+         h += dy * (-1);
+         w += dx * (-1);
+       }
+       else if(point == 2){
+         y += dy;
+         w += dx;
+         h += dy*(-1);
+       }
+       else if(point == 3){
+         h += dy;
+         x += dx;
+         w += dx*(-1);
+       
+       }
+       else if(point == 4){
+         h += dy;
+         w += dx;
+       }
+       if(this instanceof DLineModel)
+       {
+          Point p1 = new Point(x,y);
+          Point p2 = new Point(x+w,y+h);
+          this.setPoints(p1,p2);
+       }
+       else
+         shapeBound.setBounds(x,y,w,h);
+    }  
 	 
 }

@@ -61,41 +61,7 @@ public abstract class DShape implements ModelListener {
    */
    public void resizeShape(int point,int dx, int dy)
    {
-       //cooridnates of the shape
-       int x = dShapeModel.getBounds().x;
-       int y = dShapeModel.getBounds().y;
-       int w = dShapeModel.getBounds().width;
-       int h = dShapeModel.getBounds().height;
-       //resize based on knob position
-       //
-       // p1_______p2
-       // |        |
-       // |        |
-       // |        |
-       // p3_______p4
-       //
-       if(point == 1){
-         x += dx;
-         y += dy;
-         h += dy * (-1);
-         w += dx * (-1);
-       }
-       else if(point == 2){
-         y += dy;
-         w += dx;
-         h += dy*(-1);
-       }
-       else if(point == 3){
-         h += dy;
-         x += dx;
-         w += dx*(-1);
-       
-       }
-       else if(point == 4){
-         h += dy;
-         w += dx;
-       }
-       dShapeModel.setBounds(x,y,w,h);
+       dShapeModel.resizeShape(point,dx,dy);
    }
   /*
    * This method check if the Point is in bound of the Shape
