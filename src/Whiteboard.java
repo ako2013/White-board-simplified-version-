@@ -200,8 +200,14 @@ public class Whiteboard extends JFrame
             //dynamically resize rect to fit the length of the text
             int len = s.length()*7+10;
 				DTextModel d = new DTextModel();
-            d.setText(s);
-				d.setBounds(10, 10, len, 40);
+            //if textfield is empty use default text
+            if(!s.isEmpty()){
+               d.setText(s);
+               d.setBounds(10, 10, len, 40);
+            }
+            else{
+				   d.setBounds(10, 10, 50, 50);
+            }
 				drawPane.addShape(d);
 				drawPane.repaint();
 			}
