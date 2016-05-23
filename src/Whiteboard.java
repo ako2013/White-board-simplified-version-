@@ -247,7 +247,6 @@ public class Whiteboard extends JFrame
 		b9.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DShapeModel[] list = null;
 				String result = JOptionPane.showInputDialog("File Name", null);
 				if (result != null) {
 					File f = new File(result);
@@ -413,6 +412,7 @@ public class Whiteboard extends JFrame
     	{
     		drawPane.addShape(m);
     	}
+    	drawPane.repaint();
     	
     }
     

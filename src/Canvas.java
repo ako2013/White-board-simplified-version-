@@ -238,4 +238,9 @@ public class Canvas extends JPanel
 	{
 		return shapeList;
 	}
+	
+	public void resetShapes()
+	{
+		shapeList = new LinkedList<>();
+	}
 }
