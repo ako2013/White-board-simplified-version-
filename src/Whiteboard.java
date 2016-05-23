@@ -14,7 +14,10 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -43,6 +46,8 @@ public class Whiteboard extends JFrame
 	private JFrame board;
 	private JScrollPane scrollpane;
 	private StringTableModel tableModel;
+	private ArrayList<JButton> buttons;
+	private boolean server;
 	
 	public static void main(String[] args)
 	{
@@ -55,11 +60,13 @@ public class Whiteboard extends JFrame
 	{
 		// Set up the Whiteboard with different components
 		setCanvasAndPanel();
+		buttons = new ArrayList<>();
 		setButtons();
 		createTable();
 		createBoxes();		
 		setUtilPane();
 		fillCanvas();
+		server = false;
 	}	
 	
 	private void setCanvasAndPanel()
@@ -97,6 +104,7 @@ public class Whiteboard extends JFrame
 		vert.add(horz3);
 		vert.add(horz4);
 		vert.add(horz5);
+		vert.add(horz6);
 		horz1.add(b1);
 		horz1.add(b2);
 		horz1.add(b3);
@@ -126,19 +134,34 @@ public class Whiteboard extends JFrame
 	{
 		//ButtonCode
 		b1 = new JButton("Add Rect");
+		buttons.add(b1);
 		b2 = new JButton("Add Oval");
+		buttons.add(b2);
 		b3 = new JButton("Add Line");
+		buttons.add(b3);
 		b4 = new JButton("Add Text");
+		buttons.add(b4);
 		b5 = new JButton("Set Color");
+		buttons.add(b5);
 		b6 = new JButton("Move to Front");
+		buttons.add(b6);
 		b7 = new JButton("Move to Back");
+		buttons.add(b7);
 		b8 = new JButton("Remove");
+		buttons.add(b8);
 		b9 = new JButton("Save");
+		buttons.add(b9);
 		b10 = new JButton("Load");
+		buttons.add(b10);
 		b11 = new JButton("Save Image");
+		buttons.add(b11);
 		b12 = new JButton("Server Start");
+		buttons.add(b12);
 		b13 = new JButton("Client Start");
+		buttons.add(b13);
 		t1 = new JTextField();
+		
+		
 		
 		// Add rectangle
 		b1.addActionListener(new ActionListener() {
@@ -258,6 +281,26 @@ public class Whiteboard extends JFrame
 				}
 			}
 		});
+		
+		//Start Server
+		b12.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{		
+				serverStart();
+			}
+		});
+		
+		//Start Client
+		b13.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{		
+				clientStart();
+
+			}
+		});
+		
 	}
 	
 	private void setUtilPane() 
@@ -410,6 +453,54 @@ public class Whiteboard extends JFrame
 		}
     	
     }
+    
+    public void serverStart()
+    {
+    	server = true;
+    }
+    
+    public void clientStart()
+    {
+    	for(JButton b: buttons)
+    	{
+    		for(ActionListener al: b.getActionListeners())
+    		{
+    			b.removeActionListener(al);
+    		}
+    	}
+    	String s = (String)JOptionPane.showInputDialog("HostIP:Port");
+    	if (!s.equals(""))
+    	{
+    		try
+    		{
+    			Scanner in = new Scanner(s);
+    			in.useDelimiter(":");
+    			String hostIP = in.next();
+    			int port = Integer.parseInt(in.next());
+    			Client c = new Client(drawPane, hostIP, port);
+    			in.close();
+    		}
+    		catch(Exception e)
+    		{
+    			JOptionPane.showMessageDialog(drawPane, "Invalid IP");
+    			clientStart();
+    		}	
+    	}
+    	else
+    	{
+    		try
+    		{
+    			Client c = new Client(drawPane);
+    		}
+    		catch(Exception e)
+    		{
+    			JOptionPane.showMessageDialog(drawPane, "Default port 39587 is busy");
+    			clientStart();
+    		}
+    	}
+    }
+    	
+    
     
   
 }
