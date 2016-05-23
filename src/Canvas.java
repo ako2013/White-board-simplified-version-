@@ -198,8 +198,14 @@ public class Canvas extends JPanel
                            point = i;
                            break;
                         }
-                     }             
-                     selectedShape.resizeShape(point+1,dx,dy);
+                     }
+                     
+                   
+                     if (selectedShape instanceof DLine) {
+                         selectedShape.resizeLine(point+1,dx,dy);
+                     } else {
+                    	 selectedShape.resizeShape(point+1,dx,dy);
+                     }
                      createKnob(selectedShape);
                      whiteboard.updateTableSelect(selectedShape);
                      repaint();

@@ -6,13 +6,15 @@ import java.awt.Shape;
 public class DText extends DShape {
 	private double startingSize = 1.0;
     private Font computedFont; 
-    private boolean computeAgain; 
+    private boolean computeAgain;
+    private boolean firstChange;
     
 	public DText(DShapeModel dShapeModel) 
 	{
 		super(dShapeModel);
         computedFont = null; 
-        computeAgain = false;
+        computeAgain = true;
+        firstChange = true;
 	}
 
 	@Override
@@ -56,10 +58,17 @@ public class DText extends DShape {
 	
 	public Font computeFont(Graphics g)
 	{
+	
+		double theSize = startingSize;
+
 		// Computing the font and re-computing for resize later
-		if (computeAgain) {
+		if (computeAgain && !firstChange) {
+		
 			double size = startingSize;
 			double lastSize = size;
+			
+            theSize = theSize + 1;
+
 			while (true) {
 				computedFont = new Font(getFont(), Font.PLAIN, (int) size); 
 	            if (computedFont.getLineMetrics(getText(), ((Graphics2D) g).getFontRenderContext()).getHeight() > getModel().getBounds().getHeight()) {
@@ -67,10 +76,15 @@ public class DText extends DShape {
 	            }
 	            lastSize = size;
 	            size = (size * 1.1) + 1;
+	            theSize = (theSize * 1.1) + 1;
 	        }
-			computedFont = new Font(getFont(), Font.PLAIN, (int) lastSize);
-			computeAgain = false;
+			computedFont = new Font(getFont(), Font.PLAIN, (int) theSize);
+		} else {
+			computedFont = new Font(getFont(), Font.PLAIN, 15);
+			firstChange = false;
+			
 		}
+
 		return computedFont;
 	} 
 }
